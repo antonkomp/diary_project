@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %} My profile {% endblock %}
+
+
+{% block content %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    <form action={% url 'profile' %} method="GET">
+        <p>Profile: {{ user.username }}</p>
+        {% if user.first_name %}
+            <label>Fisrt name: {{ user.first_name }}</label><br>
+        {% endif %}
+        {% if user.last_name %}
+            <label>Last name: {{ user.last_name }}</label><br>
+        {% endif %}
+        <label>Email: {{ user.email }}</label><br>
+        {% if profile.birthday %}
+            <label>Birthday: {{ profile.birthday }}</label><br>
+            <label>Age: {{ profile.age }}</label><br>
+        {% endif %}
+        {% if profile.location %}
+            <label>Location: {{ profile.location }}</label><br>
+        {% endif %}
+        {% if profile.website %}
+            <label>Website: <a href="{{ profile.website }}">{{ profile.website }}</a></label><br>
+        {% endif %}
+        {% if profile.bio %}
+            <label>Bio: {{ profile.bio }}</label><br>
+        {% endif %}
+        <label>Registered since: {{ user.date_joined }} </label><br><br>
+    </form>
+    <label>Account type: <a style="color:green;" href="{% url 'account' %}">{{ profile.account_type }}</a></label>
+    {% if profile.account_type == "Standard" %}
+        <label>(change to <a style="color:DarkTurquoise;" href="{% url 'account' %}">Premium</a>)</label>
+    {% elif profile.account_type == "Premium" %}
+        <br><a href="{% url 'api' %}"> API </a>
+    {% endif %}
+    <br>
+    <hr>
+    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
+    <a style="color:orange;" href="{% url 'edit' %}"> Edit profile </a><br>
+{% endblock %}

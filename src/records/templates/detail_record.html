@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %} Detail record {% endblock %}
+{% block content %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    <h3 style="color:red;">Details record</h3>
+    <p>Date: {{ record.date }}</p>
+    <p>Heading: {{ record.heading }}</p>
+    <p>Text: {{ record.text }}</p>
+
+    {% if record.image %}
+        <p>Image: <a style="color:green;" href="{% url 'open_image' record.id %}" target="_blank"> {{ record.image }} </a></p>
+        <img src="{{ record.image.url }}" alt="connect" style="max-height:300px">
+    {% endif %}
+
+    <form action={% url "edit_record" record.id %} method="GET">
+        <input style="color:green;" type="submit" value="Edit"/>
+    </form>
+    <br>
+    <form action={% url "delete_record" record.id %} method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Delete"/>
+    </form>
+    <br>
+    <form action={% url "send_record" record.id %} method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Send to email"/>
+    </form>
+    <hr>
+    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
+    <a style="color:green;" href="{% url 'all_records' %}"> All records </a><br>
+{% endblock %}

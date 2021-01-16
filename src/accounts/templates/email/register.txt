@@ -1,0 +1,9 @@
+{% autoescape off %}Hello {{ user.profile }},
+
+Thank you for deciding to create an account on Diary. In order to complete the registration process, we need you to complete one more step. Please open the URL below in your browser:
+
+{{ url }}
+
+If you are unable to click the link, please copy and paste it into your browser's address bar.
+
+ - The Diary Staff{% endautoescape %}

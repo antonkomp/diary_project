@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} Edit record {% endblock %}
+{% block content %}
+    <h2>Whoops!</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                That page does not exist.
+                It is possible that the page you are looking for may have been moved to a new location.
+                It is also possible that you followed a link that contained a typo.
+            </p>
+            <p>In the meantime, here is a cute picture of an animal.</p>
+            <br>
+            <img src="https://dogcentr.ru/wp-content/uploads/2016/11/422-300x198.jpg" />
+        </div>
+        <div class="col-md-4">
+            {% include "fragments/search.html" %}
+        </div>
+    </div>
+{% endblock %}

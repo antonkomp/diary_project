@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} Edit entry {% endblock %}
+{% block content %}
+    <h3 style="color:red;">Edit entry</h3>
+    <form action={% url "edit_record" record_id=record.id %} method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if record.image %}
+            <label>Loaded: {{ record.image }} </label>
+            <br><br>
+        {% endif %}
+        <input type="submit" value="Save"/>
+    </form>
+    <hr>
+    <a style="color:green;" href="{% url 'main' %}"> Home </a><br>
+    <a style="color:green;" href="{% url 'all_records' %}"> My entries </a><br>
+{% endblock %}

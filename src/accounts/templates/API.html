@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block title %} API {% endblock %}
+
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/api/api.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h1 align="center" style="color:#ff0099">API</h1>
+<p>API - application programming interface.</p>
+<h2>Content</h2>
+<ol class="without_std_numb">
+    <li class="without_std_numb"> <a href='#authorization'>Authorization</a>
+        <ol class="without_std_numb">
+            <li class="without_std_numb"><a href='#get_data_auth'>Get data</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#get_data_auth_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#get_data_auth_parameters'>Response</a></li>
+                </ol>
+            </li>
+            <li class="without_std_numb"><a href='#edit_auth'>Edit</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#edit_auth_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#edit_auth_parameters'>Response</a></li>
+                </ol>
+            </li>
+        </ol>
+    </li>
+    <li class="without_std_numb"> <a href='#profile'>Working with user profile</a>
+        <ol class="without_std_numb">
+            <li class="without_std_numb"><a href='#profile_get_data'>Get data</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#profile_get_data_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#profile_get_data_edit'>Response</a></li>
+                </ol>
+            </li>
+            <li class="without_std_numb"><a href='#profile_edit'>Edit</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#profile_edit_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#profile_edit_parameters'>Response</a></li>
+                </ol>
+            </li>
+        </ol>
+    </li>
+    <li class="without_std_numb"><a href='#account'>Working with account</a>
+        <ol class="without_std_numb">
+            <li class="without_std_numb"><a href='#account_get_data'>Get data</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#account_get_data_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#account_get_data_parameters'>Response</a></li>
+                </ol>
+            </li>
+        </ol>
+    <li class="without_std_numb"><a href='#records'>Working with diary records</a></li>
+        <ol class="without_std_numb">
+            <li class="without_std_numb"><a href='#records_get_all_records'>Get all records</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#records_get_all_records_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#records_get_all_records_parameters'>Response</a></li>
+                </ol>
+            </li>
+            <li class="without_std_numb"><a href='#records_create_record'>Create record</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#records_create_record_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#records_create_record_parameters'>Response</a></li>
+                </ol>
+            </li>
+            <li class="without_std_numb"><a href='#records_edit_record'>Edit record</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#records_edit_record_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#records_edit_record_parameters'>Response</a></li>
+                </ol>
+            </li>
+            <li class="without_std_numb"><a href='#records_delete_record'>Delete record</a>
+                <ol class="without_std_numb">
+                    <li class="without_std_numb"><a href='#records_delete_record_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#records_delete_record_parameters'>Response</a></li>
+                </ol>
+            </li>
+        </ol>
+    </li>
+</ol>
+<br>
+<h2 id='authorization' >Authorization</h2>
+<hr>
+<h3 id='get_data_auth'>Get data</h3>
+<h4 id='get_data_auth_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/user/get/</th>
+    </tr>
+</table>
+<h4 id='get_data_auth_parameters'>Response</h4>
+<p> 1. 'id' - идентификатор пользователя,</p>
+<p> 2. 'last_login - дата и время последней авторизации пользователя,</p>
+<p> 3. 'username' - пользовательское имя,</p>
+<p> 4. 'first_name' - имя пользователя,</p>
+<p> 5. 'last_name' - фамилия пользователя,</p>
+<p> 6. 'is_active - доступ пользователя,</p>
+<p> 7. 'date_joined' - дата и время регистрации пользователя.</p>
+
+<h3 id='edit_auth'>Edit</h3>
+<h4 id='edit_auth_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/user/edit/</th>
+    </tr>
+</table>
+<h4 id='edit_auth_parameters'>Response</h4>
+<p> 1. 'username' - пользовательское имя,</p>
+<p> 2. 'first_name' - имя пользователя,</p>
+<p> 3. 'last_name' - фамилия пользователя,</p>
+<p> 4. 'email' - почтовый ящик пользователя.</p>
+<br>
+<h2 id='profile' >Working with user profile</h2>
+<hr>
+<h3 id='profile_get_data'>Get data</h3>
+<h4 id='profile_get_data_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/profile/get/</th>
+    </tr>
+</table>
+<h4 id='profile_get_data_edit'>Response</h4>
+<p> 1. 'user' - номер пользователя в системе,</p>
+<p> 2. 'account_type' - тип аккаунта пользователя,</p>
+<p> 3. 'birthday' - день рождения,</p>
+<p> 4. 'location' - местоположение,</p>
+<p> 5. 'website' - вебсайт пользователя,</p>
+<p> 6. 'bio' - краткая биография пользователя.</p>
+<h3 id='profile_edit'>Edit</h3>
+<h4 id='profile_edit_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/profile/edit/</th>
+    </tr>
+</table>
+<h4 id='profile_edit_parameters'>Response</h4>
+<p> 1. 'birthday' - день рождения,</p>
+<p> 2. 'location' - местоположение,</p>
+<p> 3. 'website' - вебсайт пользователя,</p>
+<p> 4. 'bio' - краткая биография пользователя.</p>
+<br>
+<h2 id='account' >Working with account</h2>
+<hr>
+<h3 id='account_get_data'>Get data</h3>
+<h4 id='account_get_data_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/account/</th>
+    </tr>
+</table>
+<h4 id='account_get_data_parameters'>Response</h4>
+<p> 1. 'id' - идентификатор пользователя,</p>
+<p> 2. 'account_type' - тип аккаунта пользователя,</p>
+<p> 3. 'key' - ключ для изменения типа аккаунта.</p>
+<br>
+<h2 id='records' >Working with diary records</h2>
+<hr>
+<h3 id='records_get_all_records'>Get all records</h3>
+<h4 id='records_get_all_records_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/records/</th>
+    </tr>
+</table>
+<h4 id='records_get_all_records_parameters'>Response</h4>
+<p> 1. 'id' - идентификатор записи,</p>
+<p> 2. 'date' - дата и время создания записи,</p>
+<p> 3. 'heading' - заголовок записи,</p>
+<p> 4. 'text' - текст записи,</p>
+<p> 5. 'image' - прикрепленное изображение к записи.</p>
+
+<h3 id='records_create_record'>Create record</h3>
+<h4 id='records_create_record_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/record/create/</th>
+    </tr>
+</table>
+<h4 id='records_create_record_parameters'>Response</h4>
+<p> 1. 'heading' - заголовок записи,</p>
+<p> 2. 'text' - текст записи,</p>
+<p> 3. 'image' - прикрепленное изображение к записи.</p>
+
+<h3 id='records_edit_record'>Edit record</h3>
+<h4 id='records_edit_record_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/record/update/[pk]/</th>
+    </tr>
+</table>
+<p>
+    Parameter [pk] - number of the record you want to update.
+</p>
+<h4 id='records_edit_record_parameters'>Response</h4>
+<p> 1. 'heading' - заголовок записи,</p>
+<p> 2. 'text' - текст записи,</p>
+<p> 3. 'image' - прикрепленное изображение к записи,</p>
+<p> 4. 'delete_image' - возможность удалить изображение.</p>
+
+<h3 id='records_delete_record'>Delete record</h3>
+<h4 id='records_delete_record_request'>Request format</h4>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>/api/record/delete/[pk]/</th>
+    </tr>
+</table>
+<p>
+    Parameter [pk] - number of the record you want to delete.
+</p>
+<h4 id='records_delete_record_parameters'>Response</h4>
+<p> 1. 'id' - идентификатор записи,</p>
+<p> 2. 'date' - дата и время создания записи,</p>
+<p> 3. 'heading' - заголовок записи,</p>
+<p> 4. 'text' - текст записи,</p>
+<p> 5. 'image' - прикрепленное изображение к записи.</p>
+<br><br>
+{% endblock %}

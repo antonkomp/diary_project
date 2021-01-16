@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %} My messages {% endblock %}
+
+{% block content %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <form action={% url 'messages' %} method="GET">
+        <h3 style="color:red;">My messages</h3>
+        <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Recipient</th>
+                <th>Heading</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td><a href="{% url 'detail_record' record.id %}">{{ record.date }}</a></td>
+                    <td><a href="{% url 'detail_record' record.id %}">{{ record.recipient }}</a></td>
+                    <td><a href="{% url 'detail_record' record.id %}">{{ record.heading }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <br>
+    </form>
+    <hr>
+    <a style="color:green;" href="{% url 'send_message' %}"> Send message </a><br>
+{% endblock %}

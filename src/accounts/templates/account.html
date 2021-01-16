@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %} Account {% endblock %}
+
+{% block content %}
+
+{% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+{% endfor %}
+<h3 style="color:red;">Account type details</h3>
+<p>Type: {{ account.account_type }}</p>
+{% if account.account_type == "Standard" %}
+    <p>By subscribing for a <b>Premium</b> account, you will get access to some extra features.
+        You will also be supporting future updates and improvements of this free service.
+        Some new features will only be available to subscribers.</p>
+    <ul>
+      <li>Profile pictures, and <b>pictures</b> in messages.</li>
+      <li><b>No advertisements</b> while logged in.</li>
+      <li>The ability to create <b>voice recordings</b>!</li>
+      <li>Using the <b>API</b>.</li>
+    </ul>
+    <p>To upgrade to a <b>Premium</b> account you need to enter a key:</p>
+    <form action={% url 'account' %} method="POST">
+            {% csrf_token %}
+            {{ form.key }}
+            <input type="submit" value="Send"/>
+    </form><br>
+{% elif account.account_type == "Premium" %}
+    <p>Thank you for switching to a premium account and becoming our subscriber.<br>
+        Now you can upload <b>images</b> to your diary, record <b>voice messages</b> and <b>no ads</b>!</p>
+    <form action={% url 'account' %} method="POST">
+            {% csrf_token %}
+            {{ form.key }}
+            <input type="submit" value="Send"/>
+    </form><br>
+{% endif %}
+    <hr>
+    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
+    <a style="color:green;" href="{% url 'profile' %}"> Profile user </a><br>
+
+{% endblock %}

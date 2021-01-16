@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %} My diary {% endblock %}
+{% block static %}
+<style>
+    .main_text {
+        transform: translate3d(30px, 20px);
+        animation-name: header_anim;
+        animation-duration: 1s;
+        animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+</style>
+{% endblock %}
+{% block content %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+        <hr>
+    <br>
+    <p class="main_text">This is an online diary service, providing personal diaries.
+        Our focus is on security and privacy, and all diaries are private by default.
+        Go ahead and register your own private diary today.</p>
+    <p class="main_text">Writing a daily record of your life is a good way to make sure your memories and experiences stay alive.
+        It lets you keep track and reflect on your past and learn from your mistakes.
+        It can also be tremendously therapeutic. Not only to record fun and adventurous moments, but also sad and scary times.
+        It can be helpful to be able to document changes in your life in an online journal.</p>
+    <hr>
+    {% if user.username %}
+        <a style="color:green;" href="{% url 'profile' %}"> Profile </a><br>
+        <a style="color:green;" href="{% url 'add_record' %}"> Add entry </a><br>
+        <a style="color:green;" href="{% url 'all_records' %}"> My entries </a><br>
+    {% endif %}
+{% endblock %}

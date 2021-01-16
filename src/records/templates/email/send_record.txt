@@ -1,0 +1,10 @@
+{% autoescape off %}Hello {{ user }},
+
+This record from your diary.
+
+Date: {{ form.date }}
+Heading: {{ form.heading }}
+Text: {{ form.text }}
+{{ form.image }}
+
+ - The Diary Staff{% endautoescape %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Registration user {% endblock %}
+{% block content %}
+    <h3 style="color:red;">Registration user</h3>
+    <form action={% url "register" %} method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input style="color:green;" type="submit" value="Register"/>
+        <input type="reset" value="Clear"/>
+    </form>
+{% endblock %}
