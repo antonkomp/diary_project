@@ -47,4 +47,4 @@ class MessagesForm(forms.ModelForm):
     """
     class Meta:
         model = Messages
-        fields = ('recipient', 'heading', 'text', 'image', 'delete_image')
+        fields = ('recipient', 'sender', 'heading', 'text', 'image', 'delete_image')

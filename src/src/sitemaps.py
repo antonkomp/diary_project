@@ -3,7 +3,7 @@ from django.urls import reverse
 
 
 class HomePageSitemap(Sitemap):
-    priority = 1.0
+    priority = 0.9
     changefreq = 'weekly'
 
     def items(self):
@@ -11,3 +11,4 @@ class HomePageSitemap(Sitemap):
 
     def location(self, item):
         return reverse(item)
+

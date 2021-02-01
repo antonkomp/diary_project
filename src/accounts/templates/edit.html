@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% block title %} Edit profile {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/edit.css' %}" />
+{% endblock %}
 {% block content %}
-    <h3 style="color:red;">Edit profile</h3>
+    <h3>Edit profile</h3>
     <p>Use the form below to make changes to this user profile.</p>
     <form action={% url 'edit' %} method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Save"/>
+        <input class="edit_save" type="submit" value="Save"/>
     </form><br>
     <hr>
-    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
+    <a class="profile" href="{% url 'profile' %}"> Profile user </a><br><br><br>
 {% endblock %}

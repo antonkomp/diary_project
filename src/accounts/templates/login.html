@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block title %} Login user {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/login.css' %}" />
+{% endblock %}
 {% block content %}
-    <h3 style="color:red;">Log in</h3>
+    <h3>Login</h3>
     <form action={% url "login" %} method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input style="color:green;" type="submit" value="Login"/>
-        <input type="reset" value="Clear"/>
+        <input class="log_buttons" type="submit" value="Log in"/>
+        <input class="log_buttons" type="reset" value="Clear"/>
     </form>
 {% endblock %}

@@ -1,0 +1,8 @@
+/* main */
+
+.main_text {
+        transform: translate3d(30px, 20px);
+        animation-name: header_anim;
+        animation-duration: 1s;
+        animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }

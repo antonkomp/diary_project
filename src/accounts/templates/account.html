@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block title %} Account {% endblock %}
-
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/account.css' %}" />
+{% endblock %}
 {% block content %}
-
 {% for message in messages %}
         <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             {{ message }}
         </div>
 {% endfor %}
-<h3 style="color:red;">Account type details</h3>
+<h3>Account type details</h3>
 <p>Type: {{ account.account_type }}</p>
 {% if account.account_type == "Standard" %}
     <p>By subscribing for a <b>Premium</b> account, you will get access to some extra features.
@@ -25,7 +27,7 @@
     <form action={% url 'account' %} method="POST">
             {% csrf_token %}
             {{ form.key }}
-            <input type="submit" value="Send"/>
+            <input class="send" type="submit" value="Send"/>
     </form><br>
 {% elif account.account_type == "Premium" %}
     <p>Thank you for switching to a premium account and becoming our subscriber.<br>
@@ -33,11 +35,10 @@
     <form action={% url 'account' %} method="POST">
             {% csrf_token %}
             {{ form.key }}
-            <input type="submit" value="Send"/>
+            <input class="send" type="submit" value="Send"/>
     </form><br>
 {% endif %}
     <hr>
-    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
-    <a style="color:green;" href="{% url 'profile' %}"> Profile user </a><br>
+    <a class="profile" href="{% url 'profile' %}"> Profile user </a><br>
 
 {% endblock %}

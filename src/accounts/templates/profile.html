@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %} My profile {% endblock %}
-
-
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/profile.css' %}" />
+{% endblock %}
 {% block content %}
     {% for message in messages %}
         <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
@@ -10,7 +12,7 @@
         </div>
     {% endfor %}
     <form action={% url 'profile' %} method="GET">
-        <p>Profile: {{ user.username }}</p>
+        <h3>Profile: {{ user.username }}</h3>
         {% if user.first_name %}
             <label>Fisrt name: {{ user.first_name }}</label><br>
         {% endif %}
@@ -33,14 +35,13 @@
         {% endif %}
         <label>Registered since: {{ user.date_joined }} </label><br><br>
     </form>
-    <label>Account type: <a style="color:green;" href="{% url 'account' %}">{{ profile.account_type }}</a></label>
+    <label>Account type: <a class="acc_type" href="{% url 'account' %}">{{ profile.account_type }}</a></label>
     {% if profile.account_type == "Standard" %}
-        <label>(change to <a style="color:DarkTurquoise;" href="{% url 'account' %}">Premium</a>)</label>
+        <label>(change to <a class="change_to_premium" href="{% url 'account' %}">Premium</a>)</label>
     {% elif profile.account_type == "Premium" %}
-        <br><a href="{% url 'api' %}"> API </a>
+        <br><a class="api" href="{% url 'api' %}"> API </a>
     {% endif %}
     <br>
     <hr>
-    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
-    <a style="color:orange;" href="{% url 'edit' %}"> Edit profile </a><br>
+    <a class="edit_profile" href="{% url 'edit' %}"> Edit profile </a><br>
 {% endblock %}

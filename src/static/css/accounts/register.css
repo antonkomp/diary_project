@@ -1,0 +1,40 @@
+/* registration */
+
+h3 {
+	color: red;
+	}
+input {
+        cursor: pointer;
+        color: black;
+        background: #eceff3;
+        border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .25rem;
+        }
+
+.reg_buttons {
+	cursor: pointer;
+        background: #1a73e8;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+input:hover {
+        -webkit-transform: scale(1.04);
+        -ms-transform: scale(1.04);
+        transform: scale(1.04);
+        }
+.reg_buttons:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }
+span {
+	font-size: 13px;
+	color: #56595A;
+	}
+.li_size li {
+	font-size: 13px;
+	color: #56595A;
+}

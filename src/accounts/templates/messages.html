@@ -1,35 +1,37 @@
 {% extends "base.html" %}
 {% block title %} My messages {% endblock %}
-
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/messages.css' %}" />
+{% endblock %}
 {% block content %}
-    {% for message in messages %}
-    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+    {% for info in messages %}
+    <div class="alert {% if info.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
+        {{ info }}
     </div>
     {% endfor %}
-    <form action={% url 'messages' %} method="GET">
-        <h3 style="color:red;">My messages</h3>
+    <form action={% url 'my_messages' %} method="GET">
+        <h3>My messages</h3>
         <table>
         <thead>
             <tr>
                 <th>Date</th>
-                <th>Recipient</th>
+                <th>Sender</th>
                 <th>Heading</th>
             </tr>
         </thead>
         <tbody>
-            {% for record in records %}
+            {% for mess in form_mess %}
                 <tr>
-                    <td><a href="{% url 'detail_record' record.id %}">{{ record.date }}</a></td>
-                    <td><a href="{% url 'detail_record' record.id %}">{{ record.recipient }}</a></td>
-                    <td><a href="{% url 'detail_record' record.id %}">{{ record.heading }}</a></td>
+                    <td> <a href="{% url 'message_details' mess.id %}">{{ mess.date }}</a> </td>
+                    <td> <a href="{% url 'message_details' mess.id %}">{{ mess.sender }}</a> </td>
+                    <td> <a href="{% url 'message_details' mess.id %}">{{ mess.heading }}</a> </td>
                 </tr>
             {% endfor %}
         </tbody>
         </table>
-        <br>
     </form>
     <hr>
-    <a style="color:green;" href="{% url 'send_message' %}"> Send message </a><br>
+    <a class="send_message" href="{% url 'send_message' %}"> Send message </a><br><br>
 {% endblock %}

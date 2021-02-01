@@ -22,8 +22,10 @@ def add_record(request):
         if form.is_valid():
             us = form.save(commit=False)
             us.user = request.user
+            if str(us.image) != '' and us.delete_image:
+                us.image = ''
             us.save()
-            messages.success(request, 'New record added!')
+            messages.success(request, 'New entry added!')
             return redirect('all_records')
     else:
         form = RecordForm()

@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 {% block title %} Send message {% endblock %}
-
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/send_message.css' %}" />
+{% endblock %}
 {% block content %}
-
+    {% for info in messages %}
+    <div class="alert {% if info.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ info }}
+    </div>
+    {% endfor %}
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>Send message</h3>
+    <p class="input_text"><label>Recipient:</label><br>{{ form.recipient }}<span style="font-size: 16px; color: grey;"> - registered user</span></p>
+    <p class="input_text"><label>Heading:</label><br>{{ form.heading }}</p>
+    <p></p><label>Text:</label><br>{{ form.text }}</p>
+    <p class="input_image"><label>Image: </label><br>{{ form.image }}</p>
+    <p><label>Delete image:</label>{{ form.delete_image }}<br></p>
+    <button class="send" type="submit">Send Message</button>
+    </form>
+    <hr>
+    <a class="my_messages" href="{% url 'my_messages' %}"> My messages </a><br><br><br>
 {% endblock %}

@@ -71,8 +71,8 @@ class Messages(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateTimeField(auto_now=True)
-    recipient = models.CharField(max_length=150, help_text='Registered user')
-    sender = models.CharField(max_length=150)
+    recipient = models.CharField(max_length=150)
+    sender = models.CharField(max_length=150, null=True, blank=True)
     heading = models.CharField(max_length=70, null=True, blank=True)
     text = models.TextField(max_length=9999)
     image = models.ImageField(blank=True, null=True)

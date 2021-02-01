@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% block title %} Edit entry {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/records/edit_record.css' %}" />
+{% endblock %}
 {% block content %}
-    <h3 style="color:red;">Edit entry</h3>
+    <h3>Edit entry</h3>
     <form action={% url "edit_record" record_id=record.id %} method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
@@ -9,9 +13,8 @@
             <label>Loaded: {{ record.image }} </label>
             <br><br>
         {% endif %}
-        <input type="submit" value="Save"/>
+        <input class="save" type="submit" value="Save"/>
     </form>
     <hr>
-    <a style="color:green;" href="{% url 'main' %}"> Home </a><br>
-    <a style="color:green;" href="{% url 'all_records' %}"> My entries </a><br>
+    <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br><br>
 {% endblock %}

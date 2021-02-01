@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf.urls import url
 from .views import main, login_user, logout, registr_user, register_confirm, profile, edit, \
-    account, message, detail_message, send_message, delete_message, open_image_message, api, APIUser, APIUserEdit, APIProfile, APIProfileEdit, APIAccount
+    account, message, message_details, send_message, delete_message, open_image_message, api, APIUser, APIUserEdit, APIProfile, APIProfileEdit, APIAccount
 
 
 urlpatterns = [
@@ -13,8 +13,8 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('edit/', edit, name='edit'),
     path('account_type/', account, name='account'),
-    path('messages/', message, name='messages'),
-    path('detail_message/<int:message_id>/', detail_message, name='detail_message'),
+    path('my_messages/', message, name='my_messages'),
+    path('message_details/<int:messages_id>/', message_details, name='message_details'),
     path('send_message/', send_message, name='send_message'),
     path('delete_message/<int:message_id>/', delete_message, name='delete_message'),
     path('open_image_message/<int:message_id>/', open_image_message, name='open_image_message'),

@@ -1,13 +1,16 @@
 {% extends "base.html" %}
-{% block title %} Add record {% endblock %}
-
+{% block title %} Add entry {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/records/add_record.css' %}" />
+{% endblock %}
 {% block content %}
     <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
+    <h3>Add entry</h3>
    {{ form.as_p }}
-   <button type="submit">Save</button>
+   <button class="save" type="submit">Save</button>
 </form>
     <hr>
-    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
-    <a style="color:green;" href="{% url 'all_records' %}"> All records </a><br>
+    <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br>
 {% endblock %}

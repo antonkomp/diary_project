@@ -1,0 +1,27 @@
+/* detail_message */
+
+h3 {
+	color: red;
+}
+.my_messages {
+	color: green;
+	}
+.image_url {
+	color: blue;
+}
+.image {
+	max-height:300px;
+}
+.delete {
+	cursor: pointer;
+        background: #EA1414;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+.delete:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }

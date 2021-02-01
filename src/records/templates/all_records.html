@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% block title %} All records {% endblock %}
-
+{% block title %} My entries {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/records/all_records.css' %}" />
+{% endblock %}
 {% block content %}
     {% for message in messages %}
     <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
@@ -9,7 +12,7 @@
     </div>
     {% endfor %}
     <form action={% url 'all_records' %} method="GET">
-        <h3 style="color:red;">All records</h3>
+        <h3>My entries</h3>
         <table>
         <thead>
             <tr>
@@ -26,9 +29,7 @@
             {% endfor %}
         </tbody>
         </table>
-        <br>
     </form>
     <hr>
-    <a style="color:green;" href="{% url 'main' %}"> Main page </a><br>
-    <a style="color:green;" href="{% url 'add_record' %}"> Add record </a><br>
+    <a class="add_record" href="{% url 'add_record' %}"> Add entry </a><br><br><br>
 {% endblock %}

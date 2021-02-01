@@ -155,15 +155,15 @@ def message(request):
     """
     Show user messages.
     """
-    mess = Messages.objects.filter(user_id=request.user.id).first()
-    return render(request, 'messages.html', {'messages': mess})
+    mess = Messages.objects.filter(recipient=request.user).all()
+    return render(request, 'messages.html', {'form_mess': mess})
 
 
 @login_required
-def detail_message(request, message_id):
+def message_details(request, messages_id):
     if request.method == "GET":
-        mess = Messages.objects.filter(id=message_id).first()
-        if mess.user_id != request.user.id:
+        mess = Messages.objects.filter(id=messages_id).first()
+        if mess.recipient != str(request.user):
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)
         context = {'message': mess}
@@ -178,11 +178,22 @@ def send_message(request):
     if request.method == 'POST':
         form = MessagesForm(request.POST, request.FILES)
         if form.is_valid():
-            us = form.save(commit=False)
-            us.user = request.user
-            us.save()
+            mess_form = form.save(commit=False)
+            mess_form.user = request.user
+            mess_form.sender = request.user
+            if str(mess_form.image) != '' and mess_form.delete_image:
+                mess_form.image = ''
+            checking = User.objects.filter(username=mess_form.recipient).first()
+            if checking is None:
+                messages.error(request, 'This user does not exist!')
+                form = MessagesForm(initial={
+                    'heading': mess_form.heading,
+                    'text': mess_form.text,
+                })
+                return render(request, 'send_message.html', {'form': form})
+            mess_form.save()
             messages.success(request, 'New message was sent!')
-            return redirect('messages')
+            return redirect('my_messages')
     else:
         form = MessagesForm()
     return render(request, 'send_message.html', {'form': form})
@@ -191,7 +202,7 @@ def send_message(request):
 @login_required
 def open_image_message(request, message_id):
     mess = Messages.objects.filter(id=message_id).first()
-    if mess.user_id != request.user.id:
+    if mess.recipient != str(request.user):
         context = {'form': AuthenticationForm()}
         return render(request, 'login.html', context)
     context = {'message': mess}
@@ -201,14 +212,14 @@ def open_image_message(request, message_id):
 @login_required
 def delete_message(request, message_id):
     mess = Messages.objects.filter(id=message_id).first()
-    if mess.user_id != request.user.id:
+    if mess.recipient != str(request.user):
         context = {'form': AuthenticationForm()}
         return render(request, 'login.html', context)
     if request.method == 'POST':
         mess = Messages.objects.filter(id=message_id).first()
         mess.delete()
         messages.success(request, 'Message was deleted.')
-        return redirect('messages')
+        return redirect('my_messages')
 
 
 @login_required

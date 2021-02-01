@@ -1,0 +1,53 @@
+/* detail_records */
+
+h3 {
+	color: red;
+}
+.my_entries {
+	color: green;
+	}
+.edit {
+	cursor: pointer;
+        background: #1a73e8;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+.delete {
+	cursor: pointer;
+        background: #EA1414;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+.send {
+	cursor: pointer;
+        background: #1a73e8;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+.image {
+	max-height:300px;
+}
+.image_url {
+	color: blue;
+}
+.send:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }
+.delete:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }
+.edit:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }

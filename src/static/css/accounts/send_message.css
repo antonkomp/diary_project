@@ -1,0 +1,57 @@
+/* send_message */
+
+h3 {
+	color: red;
+}
+.my_messages {
+	color: green;
+	}
+.input_text input {
+        cursor: pointer;
+        color: black;
+	background: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .25rem;
+        }
+textarea {
+	cursor: pointer;
+        color: black;
+	background: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .25rem;
+	width: 600px;
+	height: 240px;
+	resize: none;
+	font-family: sans-serif;
+	font-size: 14px;
+}
+.send {
+	cursor: pointer;
+        background: #1a73e8;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+.input_text input:hover {
+        -webkit-transform: scale(1.04);
+        -ms-transform: scale(1.04);
+        transform: scale(1.04);
+        }
+.send:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }
+textarea:hover {
+        -webkit-transform: scale(1.01);
+        -ms-transform: scale(1.01);
+        transform: scale(1.01);
+        }
+.input_image input:hover {
+        -webkit-transform: scale(1.01);
+        -ms-transform: scale(1.01);
+        transform: scale(1.01);
+        }

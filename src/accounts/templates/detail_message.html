@@ -1,6 +1,31 @@
 {% extends "base.html" %}
-{% block title %} Detail Message {% endblock %}
-
+{% block title %} Message details {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/detail_message.css' %}" />
+{% endblock %}
 {% block content %}
+    {% for info in messages %}
+        <div class="alert {% if info.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ info }}
+        </div>
+    {% endfor %}
+    <h3>Message details</h3>
+    <p>Date: {{ message.date }}</p>
+    <p>Sender: {{ message.sender }}</p>
+    <p>Heading: {{ message.heading }}</p>
+    <p>Text: {{ message.text }}</p>
 
+    {% if message.image %}
+        <p>Image: <a class="image_url" href="{% url 'open_image_message' message.id %}" target="_blank"> {{ message.image }} </a></p>
+        <img class="image" src="{{ message.image.url }}" alt="connect">
+    {% endif %}
+
+    <form action={% url "delete_message" message.id %} method="POST">
+        {% csrf_token %}
+        <input class="delete" type="submit" value="Delete"/>
+    </form>
+    <hr>
+    <a class="my_messages" href="{% url 'my_messages' %}"> My messages </a><br><br><br>
 {% endblock %}

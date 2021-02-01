@@ -1,0 +1,35 @@
+/* account */
+
+h3 {
+	color: red;
+	}
+.profile {
+	color: green;
+	}
+input {
+        cursor: pointer;
+        color: white;
+	background: #eceff3;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .25rem;
+        }
+
+.send {
+	cursor: pointer;
+        background: #1a73e8;
+        color: white;
+	border: 1px solid transparent;
+        padding: .275rem .55rem;
+        border-radius: .55rem;
+}
+input:hover {
+        -webkit-transform: scale(1.04);
+        -ms-transform: scale(1.04);
+        transform: scale(1.04);
+        }
+.send:hover {
+        -webkit-transform: scale(1.06);
+        -ms-transform: scale(1.06);
+        transform: scale(1.06);
+        }

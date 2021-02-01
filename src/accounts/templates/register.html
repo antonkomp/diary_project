@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {% block title %} Registration user {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/accounts/register.css' %}" />
+{% endblock %}
 {% block content %}
-    <h3 style="color:red;">Registration user</h3>
+    <h3>Registration user</h3>
     <form action={% url "register" %} method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input style="color:green;" type="submit" value="Register"/>
-        <input type="reset" value="Clear"/>
+        <div class="li_size">
+            {{ form.as_p }}
+        </div>
+        <input class="reg_buttons" type="submit" value="Register"/>
+        <input class="reg_buttons" type="reset" value="Clear"/>
     </form>
 {% endblock %}
