@@ -3,7 +3,7 @@ from .forms import RegistrForm, ProfileForm, AccountKeyForm, MessagesForm
 from django.template import loader
 from django.core.mail import send_mail
 from django.urls import reverse
-from .models import ConfirmationKey, Profile, Account, Messages
+from .models import ConfirmationKey, Profile, Account, Messages, PageView
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout as logout_user
@@ -12,10 +12,17 @@ from django.contrib.auth.forms import AuthenticationForm
 from .serializers import UserSerializer, UserEditSerializer, ProfileSerializer, ProfileEditSerializer, AccountSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
+from django.db.models import F
+
+
+def entrance_url(url):
+    entrance = PageView.objects.filter(url=url)
+    entrance.update(views=F('views') + 1)
 
 
 def main(request):
     if request.method == 'GET':
+        entrance_url('main')
         return render(request, 'main.html')
 
 
@@ -91,6 +98,7 @@ def profile(request):
     """
     Display a user's profile.
     """
+    entrance_url('profile')
     prof = Profile.objects.filter(user_id=request.user.id).first()
     return render(request, 'profile.html', {'profile': prof})
 
@@ -122,6 +130,7 @@ def edit(request):
 @login_required
 def account(request):
     if request.method == 'GET':
+        entrance_url('account')
         acc = Account.objects.filter(profile_id=request.user.id).first()
         form = AccountKeyForm()
         context = {'account': acc, 'form': form}
@@ -155,6 +164,7 @@ def message(request):
     """
     Show user messages.
     """
+    entrance_url('messages')
     mess = Messages.objects.filter(recipient=request.user).all()
     return render(request, 'messages.html', {'form_mess': mess})
 
@@ -224,6 +234,7 @@ def delete_message(request, message_id):
 
 @login_required
 def api(request):
+    entrance_url('api')
     return render(request, 'API.html')
 
 

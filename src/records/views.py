@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import RecordForm
 from .models import Record
+from accounts.models import PageView
 from django.forms import model_to_dict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,12 @@ import smtplib
 from .serializers import RecordsSerializer, CreateRecordSerializer, UpdateRecordSerializer, DeleteRecordSerializer
 from rest_framework import generics
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import F
+
+
+def entrance_url(url):
+    entrance = PageView.objects.filter(url=url)
+    entrance.update(views=F('views') + 1)
 
 
 @login_required
@@ -35,8 +42,12 @@ def add_record(request):
 @login_required
 def all_records(request):
     if request.method == "GET":
+        entrance_url('records')
         rec_user = Record.objects.filter(user_id=request.user.id).all()
-        return render(request, 'all_records.html', {'records': rec_user})
+        quantity_records = 0
+        for _ in rec_user:
+            quantity_records += 1
+        return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records})
 
 
 @login_required

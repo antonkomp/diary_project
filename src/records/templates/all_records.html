@@ -12,7 +12,7 @@
     </div>
     {% endfor %}
     <form action={% url 'all_records' %} method="GET">
-        <h3>My entries</h3>
+        <h3>My entries ({{ quantity_records }})</h3>
         <table>
         <thead>
             <tr>
