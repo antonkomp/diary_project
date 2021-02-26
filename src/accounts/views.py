@@ -12,7 +12,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from .serializers import UserSerializer, UserEditSerializer, ProfileSerializer, ProfileEditSerializer, AccountSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
-from django.db.models import F
+from django.db.models import F, Q
+from PIL import Image
+import io
+from django.core.files.base import ContentFile
+
+MAX_SIZE = 300
 
 
 def entrance_url(url):
@@ -98,20 +103,38 @@ def profile(request):
     """
     Display a user's profile.
     """
-    entrance_url('profile')
     prof = Profile.objects.filter(user_id=request.user.id).first()
     return render(request, 'profile.html', {'profile': prof})
+
+
+def upload_avatar(prof, prof_old):
+    if prof.image.width > MAX_SIZE or prof.image.height > MAX_SIZE:
+        img = Image.open(prof.image)
+        img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
+        thumb_io = io.BytesIO()
+        img.save(thumb_io, img.format, quality=90)
+        prof.image.save(prof.image.name, ContentFile(thumb_io.getvalue()), save=False)
+    prof_old.image = prof.image
 
 
 @login_required
 def edit(request):
     prof = get_object_or_404(Profile, user=request.user.id)
     if request.method == 'POST':
-        form = ProfileForm(instance=prof, data=request.POST)
+        form = ProfileForm(request.POST, request.FILES, instance=prof)
         if form.is_valid():
+            prof_old = Profile.objects.get(user_id=request.user.id)
             prof.user.first_name = form.cleaned_data['first_name']
             prof.user.last_name = form.cleaned_data['last_name']
             prof.user.email = form.cleaned_data['email']
+            if prof.image.name != prof_old.image.name:
+                if prof.image.name == '' and prof_old.image.name != '':
+                    prof_old.image.delete()
+                elif prof.image.name != '' and prof_old.image.name != '':
+                    prof_old.image.delete()
+                    upload_avatar(prof, prof_old)
+                else:
+                    upload_avatar(prof, prof_old)
             prof.user.save()
             form.save()
             messages.success(request, 'Profile was edited.')
@@ -130,7 +153,6 @@ def edit(request):
 @login_required
 def account(request):
     if request.method == 'GET':
-        entrance_url('account')
         acc = Account.objects.filter(profile_id=request.user.id).first()
         form = AccountKeyForm()
         context = {'account': acc, 'form': form}
@@ -164,9 +186,14 @@ def message(request):
     """
     Show user messages.
     """
-    entrance_url('messages')
-    mess = Messages.objects.filter(recipient=request.user).all()
-    return render(request, 'messages.html', {'form_mess': mess})
+    search_query = request.GET.get('s', '')
+    if search_query:
+        mess = Messages.objects.filter(Q(recipient=request.user) & (Q(heading__icontains=search_query) |
+                                                                    Q(text__icontains=search_query) |
+                                                                    Q(sender__icontains=search_query)))
+    else:
+        mess = Messages.objects.filter(recipient=request.user)
+    return render(request, 'messages.html', {'form_mess': mess, 'keyword_search': search_query})
 
 
 @login_required
@@ -234,7 +261,6 @@ def delete_message(request, message_id):
 
 @login_required
 def api(request):
-    entrance_url('api')
     return render(request, 'API.html')
 
 

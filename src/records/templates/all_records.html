@@ -13,6 +13,17 @@
     {% endfor %}
     <form action={% url 'all_records' %} method="GET">
         <h3>My entries ({{ quantity_records }})</h3>
+        <div class="search">
+            <input class="search_inp" name="s" placeholder="Search" type="text">
+            <button class="search_but" type="submit"></button>
+        </div>
+        {% if keyword_search != '' %}
+            <p>
+                Result of matches by: '{{ keyword_search|truncatechars:40 }}'
+            </p>
+        {% else %}
+            <br>
+        {% endif %}
         <table>
         <thead>
             <tr>
@@ -24,7 +35,7 @@
             {% for record in records %}
                 <tr>
                     <td><a href="{% url 'detail_record' record.id %}">{{ record.date }}</a></td>
-                    <td><a href="{% url 'detail_record' record.id %}">{{ record.heading }}</a></td>
+                    <td><a href="{% url 'detail_record' record.id %}">{{ record.heading|truncatechars:40 }}</a></td>
                 </tr>
             {% endfor %}
         </tbody>

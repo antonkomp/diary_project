@@ -140,34 +140,42 @@
             font: normal normal normal 14px/1 FontAwesome;
             font-size: inherit;
             text-rendering: auto;
-            content: '➲';
+            content: '\f08b';
+            font-family: FontAwesome;
             margin-left: 7px;
         }
         .icon_login::before {
-            content: "\1F464";
+            content: "\f007";
+            font-family: FontAwesome;
             margin-left: 7px;
         }
         .icon_register::before {
-            content: "🚪";
+            content: "\f090";
+            font-family: FontAwesome;
             margin-left: 7px;
         }
         .icon_home::before {
-            content: "🏠";
+            content: "\f015";
+            font-family: FontAwesome;
             margin-left: 50px;
         }
         .icon_my_entries::before {
-            content: "📘";
+            content: "\f02d";
+            font-family: FontAwesome;
             margin-left: 20px;
         }
         .icon_add_entry::before {
-            content: "➕";
+            content: "\f067";
+            font-family: FontAwesome;
             margin-left: 20px;
         }
         .icon_profile::before {
-            content: "\1F464";
+            content: "\f007";
+            font-family: FontAwesome;
             margin-left: 20px;
         }
         .icon_messages::before {
-            content: "🖂";
+            content: "\f086";
+            font-family: FontAwesome;
             margin-left: 20px;
         }

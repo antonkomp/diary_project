@@ -13,7 +13,7 @@ import smtplib
 from .serializers import RecordsSerializer, CreateRecordSerializer, UpdateRecordSerializer, DeleteRecordSerializer
 from rest_framework import generics
 from django.contrib.auth.forms import AuthenticationForm
-from django.db.models import F
+from django.db.models import F, Q
 
 
 def entrance_url(url):
@@ -43,11 +43,17 @@ def add_record(request):
 def all_records(request):
     if request.method == "GET":
         entrance_url('records')
-        rec_user = Record.objects.filter(user_id=request.user.id).all()
+        search_query = request.GET.get('s', '')
+        if search_query:
+            rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(heading__icontains=search_query) |
+                                             Q(text__icontains=search_query)))
+        else:
+            rec_user = Record.objects.filter(user_id=request.user.id)
         quantity_records = 0
         for _ in rec_user:
             quantity_records += 1
-        return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records})
+        return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records,
+                                                    'keyword_search': search_query})
 
 
 @login_required
@@ -79,6 +85,8 @@ def edit_record(request, record_id):
             record.heading = data['heading']
             record.text = data['text']
             if data['image'] is not None:
+                print(data['image'])
+                print(record.image)
                 record.image.delete()
                 record.image = data['image']
             record.delete_image = data['delete_image']

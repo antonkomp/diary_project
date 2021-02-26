@@ -7,7 +7,7 @@
 {% block content %}
     <h3>Edit profile</h3>
     <p>Use the form below to make changes to this user profile.</p>
-    <form action={% url 'edit' %} method="POST">
+    <form action={% url 'edit' %} enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input class="edit_save" type="submit" value="Save"/>

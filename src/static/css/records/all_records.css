@@ -6,3 +6,37 @@ h3 {
 .add_record {
 	color: green;
 	}
+.search {
+  position: relative;
+  width: 300px;
+}
+.search_inp, .search_but {
+  outline: none;
+  background: transparent;
+}
+.search_inp {
+  width: 100%;
+  height: 30px;
+  padding-left: 11px;
+  padding-right: 40px;
+  border: 2px solid green;
+  font-size: 14px;
+}
+.search_but {
+  border: none;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 3px;
+  right: -44px;
+  cursor: pointer;
+}
+.search_but:before {
+  content: "\f002";
+  font-family: FontAwesome;
+  font-size: 16px;
+  color: green;
+}
+.search_inp:focus {
+  border-color: #7a66b0;
+}
