@@ -9,7 +9,7 @@
   {% csrf_token %}
     <h3>Add entry</h3>
    {{ form.as_p }}
-   <button class="save" type="submit">Save</button>
+    <button class="save" type="submit">Save</button>
 </form>
     <hr>
     <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br>

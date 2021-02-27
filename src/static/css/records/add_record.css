@@ -7,20 +7,18 @@ h3 {
 	color: green;
 	}
 #id_heading {
-        cursor: pointer;
-        color: black;
-	background: white;
-	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .25rem;
-        }
+    color: black;
+    background: white;
+    border: 1px solid transparent;
+    padding: .275rem .55rem;
+    border-radius: .25rem;
+    }
 textarea {
-	cursor: pointer;
-        color: black;
-	background: white;
-	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .25rem;
+    color: black;
+    background: white;
+    border: 1px solid transparent;
+    padding: .275rem .55rem;
+    border-radius: .25rem;
 	width: 600px;
 	height: 240px;
 	resize: none;
@@ -29,28 +27,24 @@ textarea {
 }
 .save {
 	cursor: pointer;
-        background: #1a73e8;
-        color: white;
+    background: #1a73e8;
+    color: white;
 	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .55rem;
+    padding: .275rem .55rem;
+    border-radius: .55rem;
 }
 input:hover {
-        -webkit-transform: scale(1.04);
-        -ms-transform: scale(1.04);
-        transform: scale(1.04);
-        }
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+    }
 .save:hover {
-        -webkit-transform: scale(1.06);
-        -ms-transform: scale(1.06);
-        transform: scale(1.06);
-        }
+    -webkit-transform: scale(1.06);
+    -ms-transform: scale(1.06);
+    transform: scale(1.06);
+    }
 textarea:hover {
-        -webkit-transform: scale(1.01);
-        -ms-transform: scale(1.01);
-        transform: scale(1.01);
-        }
-.input_image input:hover {
-        -webkit-transform: scale(1.01);
-        -ms-transform: scale(1.01);
-        transform: scale(1.01);
+    -webkit-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    transform: scale(1.01);
+    }

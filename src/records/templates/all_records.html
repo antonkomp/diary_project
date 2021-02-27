@@ -42,5 +42,28 @@
         </table>
     </form>
     <hr>
-    <a class="add_record" href="{% url 'add_record' %}"> Add entry </a><br><br><br>
+    <a class="add_record" href="{% url 'add_record' %}"> Add entry </a><br>
+    <div class="row">
+        <div class="large-3 large-offset-5 columns">
+            <ul class="pagination">
+                {% if records.has_previous %}
+                    <li class="arrow"><a href="/page/{{ records.previous_page_number }}/">&laquo;</a></li>
+                {% else %}
+                    <li class="arrow unavailable"><a href="">&laquo;</a></li>
+                {% endif %}
+                {% for page in records.paginator.page_range %}
+                    {% if page == records.number %}
+                        <li class="current"><a href="/page/{{ page }}/">{{ page }}</a></li>
+                    {% else %}
+                        <li><a href="/page/{{ page }}/">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if records.has_next %}
+                    <li class="arrow"><a href="/page/{{ records.next_page_number }}/">&raquo;</a></li>
+                {% else %}
+                    <li class="arrow unavailable"><a href="">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}

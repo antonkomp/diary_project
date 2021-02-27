@@ -5,38 +5,108 @@ h3 {
 }
 .add_record {
 	color: green;
-	}
+}
 .search {
-  position: relative;
-  width: 300px;
+    position: relative;
+    width: 300px;
 }
 .search_inp, .search_but {
-  outline: none;
-  background: transparent;
+    outline: none;
+    background: transparent;
 }
 .search_inp {
-  width: 100%;
-  height: 30px;
-  padding-left: 11px;
-  padding-right: 40px;
-  border: 2px solid green;
-  font-size: 14px;
+    width: 100%;
+    height: 30px;
+    padding-left: 11px;
+    padding-right: 40px;
+    border: 2px solid green;
+    font-size: 14px;
 }
 .search_but {
-  border: none;
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  top: 3px;
-  right: -44px;
-  cursor: pointer;
+    border: none;
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    top: 3px;
+    right: -44px;
+    cursor: pointer;
 }
 .search_but:before {
-  content: "\f002";
-  font-family: FontAwesome;
-  font-size: 16px;
-  color: green;
+    content: "\f002";
+    font-family: FontAwesome;
+    font-size: 16px;
+    color: green;
 }
 .search_inp:focus {
-  border-color: #7a66b0;
+    border-color: #7a66b0;
+}
+.row {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 62.5rem;
+    *zoom: 1;
+  }
+.row:before, .row:after {
+    content: " ";
+    display: table;
+}
+.row:after {
+    clear: both;
+}
+.large-3 {
+    width: 50%;
+}
+.large-offset-5 {
+    margin-left: 35% !important;
+
+}
+.columns {
+    position: relative;
+    padding-left: 0.9375rem;
+    padding-right: 0.9375rem;
+    float: left;
+}
+ul.pagination {
+    display: block;
+    height: 1.5rem;
+    margin-left: -0.3125rem;
+}
+ul.pagination li {
+    height: 1.5rem;
+    color: #222222;
+    font-size: 0.9rem;
+    margin-left: 0.3125rem;
+}
+ul.pagination li a {
+    display: block;
+    padding: 0.01rem 0.45rem 0.01rem;
+    color: #313131;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+ul.pagination li:hover a, ul.pagination li a:focus {
+    background: #e6e6e6;
+}
+ul.pagination li.unavailable a {
+    cursor: default;
+    color: #404040;
+}
+ul.pagination li.unavailable:hover a, ul.pagination li.unavailable a:focus {
+    background: transparent;
+}
+ul.pagination li.current a {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: default;
+}
+ul.pagination li.current a:hover, ul.pagination li.current a:focus {
+    background: #007bff;
+}
+ul.pagination li {
+    float: left;
+    display: block;
 }

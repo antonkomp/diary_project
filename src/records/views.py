@@ -14,11 +14,27 @@ from .serializers import RecordsSerializer, CreateRecordSerializer, UpdateRecord
 from rest_framework import generics
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import F, Q
+from PIL import Image
+import io
+from django.core.files.base import ContentFile
+from django.core.paginator import Paginator
+
+
+MAX_SIZE = 1024
 
 
 def entrance_url(url):
     entrance = PageView.objects.filter(url=url)
     entrance.update(views=F('views') + 1)
+
+
+def resize_image(us):
+    if us.image.width > MAX_SIZE or us.image.height > MAX_SIZE:
+        img = Image.open(us.image)
+        img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
+        thumb_io = io.BytesIO()
+        img.save(thumb_io, img.format, quality=86)
+        us.image.save(us.image.name, ContentFile(thumb_io.getvalue()), save=False)
 
 
 @login_required
@@ -29,8 +45,11 @@ def add_record(request):
         if form.is_valid():
             us = form.save(commit=False)
             us.user = request.user
-            if str(us.image) != '' and us.delete_image:
+            print(us.heading)
+            if us.image.name is not None and us.delete_image:
                 us.image = ''
+            elif us.image.name is not None and us.delete_image is False and us.heading != '!original!':
+                resize_image(us)
             us.save()
             messages.success(request, 'New entry added!')
             return redirect('all_records')
@@ -40,19 +59,20 @@ def add_record(request):
 
 
 @login_required
-def all_records(request):
+def all_records(request, page_number=1):
     if request.method == "GET":
         entrance_url('records')
         search_query = request.GET.get('s', '')
         if search_query:
             rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(heading__icontains=search_query) |
-                                             Q(text__icontains=search_query)))
+                                                                           Q(text__icontains=search_query)))
         else:
             rec_user = Record.objects.filter(user_id=request.user.id)
+        current_page = Paginator(rec_user, 25)
         quantity_records = 0
         for _ in rec_user:
             quantity_records += 1
-        return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records,
+        return render(request, 'all_records.html', {'records': current_page.page(page_number), 'quantity_records': quantity_records,
                                                     'keyword_search': search_query})
 
 
