@@ -1,8 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import add_record, all_records, detail_record, edit_record, \
-    delete_record, open_image, send_record, APIRecords, APICreateRecord, APIUpdateRecord, APIDeleteRecord
+     delete_record, open_image, send_record, APIRecords, APICreateRecord, APIUpdateRecord, APIDeleteRecord
 
-from django.conf.urls import url
 
 urlpatterns = [
     path('add_record/', add_record, name='add_record'),
@@ -16,7 +15,5 @@ urlpatterns = [
     path('api/record/create/', APICreateRecord.as_view()),
     path('api/record/update/<int:pk>/', APIUpdateRecord.as_view()),
     path('api/record/delete/<int:pk>/', APIDeleteRecord.as_view()),
-    url(r'^page/(\d+)/$', all_records, name='all_records'),
+    re_path(r'^page/(\d+)/$', all_records, name='all_records'),
     ]
-
-

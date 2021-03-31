@@ -27,6 +27,7 @@ def entrance_url(url):
 
 def main(request):
     if request.method == 'GET':
+        PageView.objects.get_or_create(url='main')
         entrance_url('main')
         return render(request, 'main.html')
 
@@ -103,6 +104,8 @@ def profile(request):
     """
     Display a user's profile.
     """
+    PageView.objects.get_or_create(url='profile')
+    entrance_url('profile')
     prof = Profile.objects.filter(user_id=request.user.id).first()
     return render(request, 'profile.html', {'profile': prof})
 
@@ -153,6 +156,8 @@ def edit(request):
 @login_required
 def account(request):
     if request.method == 'GET':
+        PageView.objects.get_or_create(url='account')
+        entrance_url('account')
         acc = Account.objects.filter(profile_id=request.user.id).first()
         form = AccountKeyForm()
         context = {'account': acc, 'form': form}
@@ -186,6 +191,8 @@ def message(request):
     """
     Show user messages.
     """
+    PageView.objects.get_or_create(url='message')
+    entrance_url('message')
     search_query = request.GET.get('s', '')
     if search_query:
         mess = Messages.objects.filter(Q(recipient=request.user) & (Q(heading__icontains=search_query) |
@@ -261,6 +268,8 @@ def delete_message(request, message_id):
 
 @login_required
 def api(request):
+    PageView.objects.get_or_create(url='api')
+    entrance_url('api')
     return render(request, 'API.html')
 
 

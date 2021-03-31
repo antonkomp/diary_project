@@ -45,7 +45,6 @@ def add_record(request):
         if form.is_valid():
             us = form.save(commit=False)
             us.user = request.user
-            print(us.heading)
             if us.image.name is not None and us.delete_image:
                 us.image = ''
             elif us.image.name is not None and us.delete_image is False and us.heading != '!original!':
@@ -61,19 +60,19 @@ def add_record(request):
 @login_required
 def all_records(request, page_number=1):
     if request.method == "GET":
+        PageView.objects.get_or_create(url='records')
         entrance_url('records')
         search_query = request.GET.get('s', '')
-        if search_query:
-            rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(heading__icontains=search_query) |
-                                                                           Q(text__icontains=search_query)))
-        else:
-            rec_user = Record.objects.filter(user_id=request.user.id)
+        rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(heading__icontains=search_query) |
+                   Q(text__icontains=search_query))) if search_query else Record.objects.filter(user_id=request.user.id)
         current_page = Paginator(rec_user, 25)
         quantity_records = 0
         for _ in rec_user:
             quantity_records += 1
-        return render(request, 'all_records.html', {'records': current_page.page(page_number), 'quantity_records': quantity_records,
-                                                    'keyword_search': search_query})
+        return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records,
+                                                    'keyword_search': search_query}) if search_query else render(
+                    request, 'all_records.html', {'records': current_page.page(page_number),
+                                                  'quantity_records': quantity_records, 'keyword_search': search_query})
 
 
 @login_required
@@ -105,8 +104,6 @@ def edit_record(request, record_id):
             record.heading = data['heading']
             record.text = data['text']
             if data['image'] is not None:
-                print(data['image'])
-                print(record.image)
                 record.image.delete()
                 record.image = data['image']
             record.delete_image = data['delete_image']
