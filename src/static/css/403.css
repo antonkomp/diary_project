@@ -1,0 +1,108 @@
+/* 403 */
+
+a {
+    text-decoration: none;
+}
+ol {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+header{
+    width: 100%;
+    height: 58px;
+    font-size:16px ;
+}
+.content {
+    color: Green;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+    line-height: 24px;
+    min-height: calc(100vh - 70px);
+}
+footer {
+    padding-top: 15px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    color: #e0e0e0;
+    font-size:15px ;
+}
+button {
+    cursor: pointer;
+    background: #E7ECF0;
+    border-color: #EFEFEF;
+    padding: .275rem .55rem;
+    border-radius: .55rem;
+}
+button:hover {
+    -webkit-transform: scale(1.08);
+    -ms-transform: scale(1.08);
+    transform: scale(1.08);
+}
+::before {
+    box-sizing: border-box;
+}
+.wrapper {
+    font-family: Mont, sans-serif;
+    -ms-font-feature-settings: normal;
+    color: #e0e0e0;
+}
+.hat_nav {
+    margin-bottom: 0px;
+    background: rgba(0, 0, 0, 0.65) none repeat scroll 0 0;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: .5rem 1rem;
+}
+.hat_div {
+    display: flex!important;
+    flex-basis: auto;
+    flex-grow: 1;
+    align-items: center;
+}
+.top {
+    display: flex;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    flex-wrap: wrap;
+}
+.hat_label {
+    margin-left: 13px;
+    margin-top: 3px;
+}
+.hat_label_text {
+    margin-left: 10px;
+    margin-top: 4px;
+    font-size:24px;
+}
+label.contact {
+    text-align: right;
+    margin-left: 17px;
+}
+label.file {
+    margin-left: 20px;
+}
+.download_diary {
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    border: 1px solid transparent;
+    padding: .275rem .55rem;
+    border-radius: .25rem;
+}
+.download_diary:hover {
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+}

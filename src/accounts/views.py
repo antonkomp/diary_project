@@ -17,7 +17,13 @@ from PIL import Image
 import io
 from django.core.files.base import ContentFile
 
+
 MAX_SIZE = 300
+
+
+def csrf_failure(request, reason=""):
+    ctx = {'message': ' Error 403. This user is already logged in!'}
+    return render(request, '403.html', ctx)
 
 
 def entrance_url(url):
@@ -37,6 +43,7 @@ def login_user(request):
         Log a user in.
     """
     if request.method == 'GET':
+        logout_user(request)
         context = {'form': AuthenticationForm()}
         return render(request, 'login.html', context)
     elif request.method == 'POST':
@@ -63,6 +70,7 @@ def registr_user(request):
         Present a registration form for new users.
     """
     if request.method == 'GET':
+        logout_user(request)
         context = {'form': RegistrForm(), 'description': "Please fill in the form below to create your account."}
         return render(request, 'register.html', context)
     elif request.method == 'POST':

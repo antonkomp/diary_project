@@ -8,9 +8,8 @@ h3 {
 	}
 input {
         cursor: pointer;
-        color: white;
 	background: #eceff3;
-	border: 1px solid transparent;
+	border: 1px solid;
         padding: .275rem .55rem;
         border-radius: .25rem;
         }

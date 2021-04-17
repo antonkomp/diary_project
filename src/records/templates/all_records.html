@@ -11,6 +11,7 @@
         {{ message }}
     </div>
     {% endfor %}
+    <div class="search_entries">
     <form action={% url 'all_records' %} method="GET">
         <h3>My entries ({{ quantity_records }})</h3>
         <div class="search">
@@ -24,25 +25,49 @@
         {% else %}
             <br>
         {% endif %}
-        <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Heading</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in records %}
-                <tr>
-                    <td><a href="{% url 'detail_record' record.id %}">{{ record.date }}</a></td>
-                    <td><a href="{% url 'detail_record' record.id %}">{{ record.heading|truncatechars:40 }}</a></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        </table>
     </form>
-    <hr>
-    <a class="add_record" href="{% url 'add_record' %}"> Add entry </a><br>
+    </div>
+        <a class="add_record" href="{% url 'add_record' %}"> Add entry </a>
+    <!-- new table -->
+        <div class="content_entries">
+        <div class="tableBlock">
+            <div style="display: flex; box-sizing: border-box;">
+                <div class="head_col">Date</div>
+                <div class="head_col">Heading</div>
+                <div class="head_col head_right">Action</div>
+
+            </div>
+            <hr class="hr_head">
+        {% for record in records %}
+            <div class="tableBlock__row">
+                <div class="entr_col">
+                    <a href="{% url 'detail_record' record.id %}"><label class="fa fa-calendar-check-o"></label>
+                        {{ record.date }}
+                    </a>
+                </div>
+                <div class="entr_col">
+                    <a href="{% url 'detail_record' record.id %}"><label class="fa fa-navicon"></label>
+                        {{ record.heading|truncatechars:40 }}
+                    </a>
+                </div>
+                <div class="right_side entr_col" >
+                    <a href="{% url 'detail_record' record.id %}">
+                        <button class="btn"><i class="fa fa-eye"></i></button>
+                    </a>
+                    <a href="{% url 'edit_record' record.id %}">
+                        <button class="btn"><i class="fa fa-edit"></i></button>
+                    </a>
+                    <form class="peren" action={% url "delete_record" record.id %} method="POST">
+                        {% csrf_token %}
+                        <button class="btn"><i class="fa fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        </div>
+
+    <!-- pagination -->
     <div class="row">
         <div class="large-3 large-offset-5 columns">
             <ul class="pagination">

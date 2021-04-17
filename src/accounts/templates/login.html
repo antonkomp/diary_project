@@ -12,4 +12,7 @@
         <input class="log_buttons" type="submit" value="Log in"/>
         <input class="log_buttons" type="reset" value="Clear"/>
     </form>
+    <a class="auth_google" href="{% url 'social:begin' 'google-oauth2' %}">
+        Login from google
+    </a>
 {% endblock %}

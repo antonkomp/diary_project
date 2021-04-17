@@ -9,14 +9,14 @@ h3 {
 #id_heading {
     color: black;
     background: white;
-    border: 1px solid transparent;
+    border: 1px solid;
     padding: .275rem .55rem;
     border-radius: .25rem;
     }
 textarea {
     color: black;
     background: white;
-    border: 1px solid transparent;
+    border: 1px solid;
     padding: .275rem .55rem;
     border-radius: .25rem;
 	width: 600px;

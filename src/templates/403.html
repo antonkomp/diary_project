@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Error 403</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'image/favicon.ico' %}">
+        <link rel="stylesheet" href="{% static 'css/403.css' %}" />
+        <style>
+            @font-face {
+                font-family: 'Mont';
+                src: url('{% static 'fonts/Montserrat-Italic.eot' %}');
+                src: local('Mont'), local('Mont'),
+                    url('{% static 'fonts/Montserrat-Italic.eot?#iefix' %}') format('embedded-opentype'),
+                    url('{% static 'fonts/Montserrat-Italic.woff2' %}') format('woff2'),
+                    url('{% static 'fonts/Montserrat-Italic.woff' %}') format('woff'),
+                    url('{% static 'fonts/Montserrat-Italic.ttf' %}') format('truetype');
+                font-weight: normal;
+                font-style: italic;
+            }
+            body {
+                background: url( "{% static 'image/background1.jpg' %}") no-repeat center center fixed;
+                background-size: cover;
+                margin:0;
+                padding:0;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="wrapper">
+    <header>
+        <nav class="hat_nav">
+        <div class="hat_div">
+            <ol class="top">
+                <li class="hat_label">
+                    <label>
+                        <a href="{% url 'main' %}"><img src="{% static 'image/diary.png' %}" width="32" height="32" alt="label">
+                        </a>
+                    </label>
+                </li>
+                <li class="hat_label_text">
+                    <label>
+                        <a href="{% url 'main' %}" style="color: white;">
+                            diary.by
+                        </a>
+                    </label>
+                </li>
+            </ol>
+        </div>
+        </nav>
+    </header>
+    <div class="content">
+        <h2>Whoops!</h2>
+        <p>{{ message }}</p>
+        <p>In the meantime, here is a cute picture of an animal.</p><br>
+        <img src="https://dogcentr.ru/wp-content/uploads/2016/11/422-300x198.jpg" />
+    </div>
+    <footer>
+        <p>© 2021, diary.by
+            <label class="contact">Contact: antonkomp@gmail.com
+            </label>
+            <label class="file">Use our offline diary:</label>
+            <a href="{% static 'diary_one_file.zip' %}" download="">
+                <button class="download_diary">
+                    Download file
+                </button>
+            </a>
+        </p>
+    </footer>
+    </div>
+    </body>
+</html>

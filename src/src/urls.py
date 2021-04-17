@@ -31,10 +31,12 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('', include('records.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 handler404 = 'views.my_custom_page_not_found_view'
 handler500 = 'views.my_custom_error_view'
+handler403 = 'views.my_custom_permission_denied_view'
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
