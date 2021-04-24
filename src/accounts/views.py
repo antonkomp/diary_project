@@ -35,7 +35,8 @@ def main(request):
     if request.method == 'GET':
         PageView.objects.get_or_create(url='main')
         entrance_url('main')
-        return render(request, 'main.html')
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        return render(request, 'main.html', {'profile': profile_image})
 
 
 def login_user(request):
@@ -158,7 +159,8 @@ def edit(request):
                 'last_name': prof.user.last_name,
                 'email': prof.user.email,
             })
-    return render(request, "edit.html", {'form': form})
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        return render(request, "edit.html", {'form': form, 'profile': profile_image})
 
 
 @login_required
@@ -168,7 +170,8 @@ def account(request):
         entrance_url('account')
         acc = Account.objects.filter(profile_id=request.user.id).first()
         form = AccountKeyForm()
-        context = {'account': acc, 'form': form}
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        context = {'account': acc, 'form': form, 'profile': profile_image}
         return render(request, 'account.html', context)
     if request.method == 'POST':
         form = AccountKeyForm(request.POST, request.FILES)
@@ -202,13 +205,14 @@ def message(request):
     PageView.objects.get_or_create(url='message')
     entrance_url('message')
     search_query = request.GET.get('s', '')
+    profile_image = Profile.objects.filter(user_id=request.user.id).first()
     if search_query:
         mess = Messages.objects.filter(Q(recipient=request.user) & (Q(heading__icontains=search_query) |
                                                                     Q(text__icontains=search_query) |
                                                                     Q(sender__icontains=search_query)))
     else:
         mess = Messages.objects.filter(recipient=request.user)
-    return render(request, 'messages.html', {'form_mess': mess, 'keyword_search': search_query})
+    return render(request, 'messages.html', {'form_mess': mess, 'keyword_search': search_query, 'profile': profile_image})
 
 
 @login_required
@@ -218,7 +222,8 @@ def message_details(request, messages_id):
         if mess.recipient != str(request.user):
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)
-        context = {'message': mess}
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        context = {'message': mess, 'profile': profile_image}
         return render(request, 'detail_message.html', context)
 
 
@@ -248,7 +253,8 @@ def send_message(request):
             return redirect('my_messages')
     else:
         form = MessagesForm()
-    return render(request, 'send_message.html', {'form': form})
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+    return render(request, 'send_message.html', {'form': form, 'profile': profile_image})
 
 
 @login_required
@@ -278,7 +284,8 @@ def delete_message(request, message_id):
 def api(request):
     PageView.objects.get_or_create(url='api')
     entrance_url('api')
-    return render(request, 'API.html')
+    profile_image = Profile.objects.filter(user_id=request.user.id).first()
+    return render(request, 'API.html', {'profile': profile_image})
 
 
 class APIUser(generics.RetrieveAPIView):

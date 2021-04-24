@@ -46,10 +46,18 @@
             list-style: none;
             margin-top: 8px;
         }
-        .hat_li_login {
+        .hat_li_image {
             display: list-item;
             text-align: center!important;
             list-style: none;
+            margin-top: 4px;
+            margin-right: 10px;
+        }
+        .hat_li_logout {
+            display: list-item;
+            text-align: center!important;
+            list-style: none;
+            margin-top: 8px;
         }
         .wrapper {
             font-family: Mont, sans-serif;

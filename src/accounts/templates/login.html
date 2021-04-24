@@ -13,6 +13,16 @@
         <input class="log_buttons" type="reset" value="Clear"/>
     </form>
     <a class="auth_google" href="{% url 'social:begin' 'google-oauth2' %}">
-        Login from google
+        Login with google
+    </a><br>
+    <a class="auth_facebook" href="{% url 'social:begin' 'facebook' %}">
+        Login with facebook
+    </a><br>
+    <a class="auth_instagram" href="{% url 'social:begin' 'google-oauth2' %}">
+        Login with instagram
+    </a><br>
+    <a class="auth_linkidin" href="{% url 'social:begin' 'google-oauth2' %}">
+        Login with linkidin
     </a>
+
 {% endblock %}

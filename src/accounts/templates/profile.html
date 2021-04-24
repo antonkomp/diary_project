@@ -12,12 +12,12 @@
         </div>
     {% endfor %}
     <form action={% url 'profile' %} method="GET">
-        <h3>Profile: {{ user.username }}</h3>
+        <h3>{{ user.username }}</h3>
         <div class="avatar">
             {% if profile.image %}
                 <img class="image" src="{{ profile.image.url }}" alt="picture">
             {% else %}
-                <img class="image_default" src="{% static 'image/default_pic.png' %}" alt="picture" width="150" height="150">
+                <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="picture" width="150" height="150">
             {% endif %}
         </div>
         {% if user.first_name %}

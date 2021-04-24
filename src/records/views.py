@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import RecordForm
 from .models import Record
-from accounts.models import PageView
+from accounts.models import PageView, Profile
 from django.forms import model_to_dict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -54,7 +54,8 @@ def add_record(request):
             return redirect('all_records')
     else:
         form = RecordForm()
-    return render(request, 'add_record.html', {'form': form})
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+    return render(request, 'add_record.html', {'form': form, 'profile': profile_image})
 
 
 @login_required
@@ -69,10 +70,11 @@ def all_records(request, page_number=1):
         quantity_records = 0
         for _ in rec_user:
             quantity_records += 1
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
         return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records,
-                                                    'keyword_search': search_query}) if search_query else render(
+                                                    'keyword_search': search_query, 'profile': profile_image}) if search_query else render(
                     request, 'all_records.html', {'records': current_page.page(page_number),
-                                                  'quantity_records': quantity_records, 'keyword_search': search_query})
+                                                  'quantity_records': quantity_records, 'keyword_search': search_query, 'profile': profile_image})
 
 
 @login_required
@@ -82,7 +84,8 @@ def detail_record(request, record_id):
         if record.user_id != request.user.id:
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)
-        context = {'record': record}
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        context = {'record': record, 'profile': profile_image}
         return render(request, 'detail_record.html', context)
 
 
@@ -94,7 +97,8 @@ def edit_record(request, record_id):
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)
         record.delete_image = False
-        context = {'form': RecordForm(model_to_dict(record)), 'record': record}
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        context = {'form': RecordForm(model_to_dict(record)), 'record': record, 'profile': profile_image}
         return render(request, 'edit_record.html', context)
     elif request.method == "POST":
         form = RecordForm(request.POST, request.FILES)

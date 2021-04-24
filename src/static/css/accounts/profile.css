@@ -15,3 +15,6 @@ h3 {
 .edit_profile {
 	color: red;
 }
+.image_default {
+    border-radius: 50%;
+}

@@ -84,8 +84,22 @@
             </li>
         </ol>
         <ol class="login">
-            <li class="hat_li_login">Hello, {{ user.username }} </li>
-            <li class="hat_li_login">
+            <li class="hat_li_image">
+                {% if profile.image %}
+                    <img class="image" src="{{ profile.image.url }}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
+                {% else %}
+                    {% for ass in backends.associated %}
+                      {% if ass.provider == 'facebook' %}
+                        <div class="social_image">
+                            <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="28" height="28" style="border-radius: 50%" title="{{ user.username }}">
+                        </div>
+                      {% else %}
+                          <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="28" height="28" style="border-radius: 50%" title="{{ user.username }}">
+                      {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </li>
+            <li class="hat_li_logout">
                 <a href="/logout/" style="color:red;">
                     <label class="icon_out"></label>
                     Logout

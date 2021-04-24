@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost']
 
 SITE_ID = 1
 # Application definition
@@ -51,6 +51,9 @@ INSTALLED_APPS = [
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'social_core.backends.instagram.InstagramOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -69,14 +72,29 @@ SOCIAL_AUTH_PIPELINE = (
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
-
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '750619477545-0c2t59a849v6lhvct2g93vf8uphm871q.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '8m3iEun0aYWbZjRfSWh-_0Jl'
+SOCIAL_AUTH_REDIRECT = True
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
+SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'email', 'picture', 'link']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link']  # add this
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {        # add this
+  'fields': 'id, name, email, picture.type(large), link'
+}
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [                  # add this
+    ('name', 'name'),
+    ('email', 'email'),
+    ('picture', 'picture'),
+    ('link', 'profile_url'),
+]
+#SOCIAL_AUTH_UUID_LENGTH = 8
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '750619477545-0c2t59a849v6lhvct2g93vf8uphm871q.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY = '204817751144247'
+SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
