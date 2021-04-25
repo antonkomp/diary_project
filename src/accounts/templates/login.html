@@ -12,17 +12,15 @@
         <input class="log_buttons" type="submit" value="Log in"/>
         <input class="log_buttons" type="reset" value="Clear"/>
     </form>
+    <p>or</p>
     <a class="auth_google" href="{% url 'social:begin' 'google-oauth2' %}">
-        Login with google
+        Login with Google
     </a><br>
     <a class="auth_facebook" href="{% url 'social:begin' 'facebook' %}">
-        Login with facebook
+        Login with Facebook
     </a><br>
-    <a class="auth_instagram" href="{% url 'social:begin' 'google-oauth2' %}">
-        Login with instagram
-    </a><br>
-    <a class="auth_linkidin" href="{% url 'social:begin' 'google-oauth2' %}">
-        Login with linkidin
+    <a class="auth_linkidin" href="{% url 'social:begin' 'linkedin-oauth2' %}">
+        Login with LinkidIn
     </a>
 
 {% endblock %}

@@ -89,9 +89,13 @@
                     <img class="image" src="{{ profile.image.url }}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
                 {% else %}
                     {% for ass in backends.associated %}
-                      {% if ass.provider == 'facebook' %}
+                      {% if ass.provider == 'google-oauth2' %}
                         <div class="social_image">
-                            <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="28" height="28" style="border-radius: 50%" title="{{ user.username }}">
+                            <img src="{{ass.extra_data.picture}}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
+                        </div>
+                      {% elif ass.provider == 'facebook' %}
+                        <div class="social_image">
+                            <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
                         </div>
                       {% else %}
                           <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="28" height="28" style="border-radius: 50%" title="{{ user.username }}">

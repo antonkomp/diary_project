@@ -15,9 +15,21 @@
         <h3>{{ user.username }}</h3>
         <div class="avatar">
             {% if profile.image %}
-                <img class="image" src="{{ profile.image.url }}" alt="picture">
+                <img class="image" src="{{ profile.image.url }}" alt="user_image">
             {% else %}
-                <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="picture" width="150" height="150">
+                {% for ass in backends.associated %}
+                  {% if ass.provider == 'google-oauth2' %}
+                    <div class="social_image">
+                        <img src="{{ass.extra_data.picture}}" alt="user_image">
+                    </div>
+                  {% elif ass.provider == 'facebook' %}
+                    <div class="social_image">
+                        <img src="{{ass.extra_data.picture.data.url}}" alt="user_image">
+                    </div>
+                  {% else %}
+                      <img class="image_default" src="{% static 'image/anonymous.jpg' %}" width="150" height="150">
+                  {% endif %}
+                {% endfor %}
             {% endif %}
         </div>
         {% if user.first_name %}
@@ -26,7 +38,9 @@
         {% if user.last_name %}
             <label>Last name: {{ user.last_name }}</label><br>
         {% endif %}
-        <label>Email: {{ user.email }}</label><br>
+        {% if user.email %}
+            <label>Email: {{ user.email }}</label><br>
+        {% endif %}
         {% if profile.birthday %}
             <label>Birthday: {{ profile.birthday }}</label><br>
             <label>Age: {{ profile.age }}</label><br>
@@ -40,6 +54,17 @@
         {% if profile.bio %}
             <label>Bio: {{ profile.bio }}</label><br>
         {% endif %}
+        {% for ass in backends.associated %}
+            {% if ass.provider == 'google-oauth2' %}
+                <label> Signed in via:  Google </label><br>
+            {% endif %}
+            {% if ass.provider == 'facebook' %}
+                <label> Signed in via: <a href="{{ass.extra_data.link}}">Facebook</a></label><br>
+            {% endif %}
+            {% if ass.provider == 'linkedin-oauth2' %}
+                <label> Signed in via:  Linkedin </label><br>
+            {% endif %}
+        {% endfor %}
         <label>Registered since: {{ user.date_joined }} </label><br><br>
     </form>
     <label>Account type: <a class="acc_type" href="{% url 'account' %}">{{ profile.account_type }}</a></label>

@@ -63,7 +63,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
+    #  'social_core.pipeline.social_auth.associate_by_email',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
@@ -78,22 +78,37 @@ SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_REDIRECT = True
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'email', 'picture', 'link']
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link']  # add this
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {        # add this
+SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'email', 'image', 'website']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+     'https://www.googleapis.com/auth/userinfo.email',
+     'https://www.googleapis.com/auth/userinfo.profile',
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['picture', 'email']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   'fields': 'id, name, email, picture.type(large), link'
 }
-SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [                  # add this
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
     ('name', 'name'),
     ('email', 'email'),
     ('picture', 'picture'),
-    ('link', 'profile_url'),
+    ('link', 'link'),
 ]
-#SOCIAL_AUTH_UUID_LENGTH = 8
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SCOPE = ['r_liteprofile', 'r_emailaddress']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_FIELD_SELECTORS = ['emailAddress']
+SOCIAL_AUTH_LINKEDIN_OAUTH2_EXTRA_DATA = [
+    ('id', 'id'),
+    ('localizedFirstName', 'first_name'),
+    ('localizedLastName', 'last_name'),
+    ('emailAddress', 'email_address'),
+]
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '750619477545-0c2t59a849v6lhvct2g93vf8uphm871q.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_FACEBOOK_KEY = '204817751144247'
 SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '784g01g1os8so1'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = config('SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET')
 
 
 MIDDLEWARE = [

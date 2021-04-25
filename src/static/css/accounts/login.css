@@ -30,3 +30,18 @@ input:hover {
         -ms-transform: scale(1.06);
         transform: scale(1.06);
         }
+.auth_google::before {
+    content: "\f0d4";
+    font-family: FontAwesome;
+    margin-left: 10px;
+}
+.auth_facebook::before {
+    content: "\f082";
+    font-family: FontAwesome;
+    margin-left: 10px;
+}
+.auth_linkidin::before {
+    content: "\f08c";
+    font-family: FontAwesome;
+    margin-left: 10px;
+}
