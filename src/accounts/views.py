@@ -16,6 +16,7 @@ from django.db.models import F, Q
 from PIL import Image
 import io
 from django.core.files.base import ContentFile
+from django.http import JsonResponse
 
 
 MAX_SIZE = 300
@@ -50,8 +51,9 @@ def login_user(request):
     elif request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if not form.is_valid():
-            return HttpResponse('Your input is invalid', status=400)
-        messages.success(request, f'Welcome!')
+            messages.error(request, 'Your input is invalid!')
+            return redirect('login')
+        messages.success(request, 'Welcome!')
         login(request, form.get_user())
         return redirect('main')
 
@@ -77,7 +79,8 @@ def registr_user(request):
     elif request.method == 'POST':
         form = RegistrForm(data=request.POST)
         if not form.is_valid():
-            return HttpResponse('Your input is invalid', status=400)
+            messages.error(request, 'Your input is invalid!')
+            return redirect('register')
         user = form.save(commit=False)
         user.email = form.cleaned_data['email']
         user.is_active = False
@@ -92,6 +95,15 @@ def registr_user(request):
         messages.info(request,
                       "Please check the email address you provided for instructions on activating your account.")
         return redirect('main')
+
+
+def validate_username(request):
+    """Check username availability"""
+    username = request.GET.get('username', None)
+    response = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(response)
 
 
 def register_confirm(request, key):
@@ -149,7 +161,7 @@ def edit(request):
                     upload_avatar(prof, prof_old)
             prof.user.save()
             form.save()
-            messages.success(request, 'Profile was edited.')
+            messages.success(request, 'Profile edited.')
             return redirect('profile')
     else:
         form = ProfileForm(
@@ -207,7 +219,7 @@ def message(request):
     search_query = request.GET.get('s', '')
     profile_image = Profile.objects.filter(user_id=request.user.id).first()
     if search_query:
-        mess = Messages.objects.filter(Q(recipient=request.user) & (Q(heading__icontains=search_query) |
+        mess = Messages.objects.filter(Q(recipient=request.user) & (Q(header__icontains=search_query) |
                                                                     Q(text__icontains=search_query) |
                                                                     Q(sender__icontains=search_query)))
     else:
@@ -244,12 +256,12 @@ def send_message(request):
             if checking is None:
                 messages.error(request, 'This user does not exist!')
                 form = MessagesForm(initial={
-                    'heading': mess_form.heading,
+                    'header': mess_form.header,
                     'text': mess_form.text,
                 })
                 return render(request, 'send_message.html', {'form': form})
             mess_form.save()
-            messages.success(request, 'New message was sent!')
+            messages.success(request, 'New message sent!')
             return redirect('my_messages')
     else:
         form = MessagesForm()
@@ -276,7 +288,7 @@ def delete_message(request, message_id):
     if request.method == 'POST':
         mess = Messages.objects.filter(id=message_id).first()
         mess.delete()
-        messages.success(request, 'Message was deleted.')
+        messages.success(request, 'Message deleted.')
         return redirect('my_messages')
 
 

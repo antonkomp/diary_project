@@ -1,0 +1,69 @@
+
+#controls {
+  display: flex;
+  max-width: 22em;
+  padding-bottom: 8px;
+}
+
+#controls button {
+  flex-grow: 1;
+  border: none;
+  background: #ed341d;
+  margin-left: 4px;
+  box-shadow: inset 0 -0.15rem 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  color:#ffffff;
+  font-weight: bold;
+}
+
+#controls button:hover, button:focus {
+  outline: none;
+  background: #c72d1c;
+  -webkit-transform: scale(1.04);
+  -ms-transform: scale(1.04);
+  transform: scale(1.04);
+}
+
+#controls button::-moz-focus-inner {
+  border: 0;
+}
+
+#controls button:active {
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+#controls button:disabled {
+  pointer-events: none;
+  background: lightgray;
+}
+#controls button:first-child {
+  margin-left: 0;
+}
+audio {
+  display: block;
+  width: 100%;
+  margin-top: 0.6rem;
+  margin-bottom: 1.5em;
+  margin-left: -1em;
+}
+s
+li {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+#recordingsList{
+	max-width: 20em;
+}
+li {
+    list-style-type: none; /* Убираем маркеры */
+}
+ul {
+    margin-left: 0;
+    padding-left: 0;
+}
+audio::-webkit-media-controls-play-button,
+     audio::-webkit-media-controls-panel {
+     background-color: #dadada;
+     }

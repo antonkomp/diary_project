@@ -6,7 +6,8 @@
 {% endblock %}
 {% block content %}
 {% for message in messages %}
-        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+        <div class="alert {% if message.tags == 'error' %} alert-danger {% elif message.tags == 'warning' %} alert-warning
+         {% else %} alert-info {% endif %}">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             {{ message }}
         </div>
@@ -18,13 +19,13 @@
         You will also be supporting future updates and improvements of this free service.
         Some new features will only be available to subscribers.</p>
     <ul>
-      <li>Profile pictures, and <b>pictures</b> in messages.</li>
+      <li><b>Pictures</b> in entries and messages.</li>
       <li><b>No advertisements</b> while logged in.</li>
       <li>The ability to create <b>voice recordings</b>!</li>
       <li>Using the <b>API</b>.</li>
     </ul>
     <p>To upgrade to a <b>Premium</b> account you need to enter a key:</p>
-    <form action={% url 'account' %} method="POST">
+    <form action="{% url 'account' %}" method="POST">
             {% csrf_token %}
             {{ form.key }}
             <input class="send" type="submit" value="Send"/>

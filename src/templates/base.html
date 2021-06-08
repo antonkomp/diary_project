@@ -9,8 +9,23 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'image/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'css/body.css' %}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    {% block static %}
-    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".close").click(function(){
+                $(".alert").hide('drop', { direction: "up" }, 500);
+            });
+        });
+        setTimeout(function() {
+           $(".alert").hide('blind', 1000);
+        }, 4000);
+        $(".close").click(function(){
+                $(".alert").hide('drop', { direction: "up" }, 500);
+            });
+    </script>
+    {% block static %}{% endblock %}
     <style>
         @font-face {
             font-family: 'Mont';
@@ -86,27 +101,34 @@
         <ol class="login">
             <li class="hat_li_image">
                 {% if profile.image %}
-                    <img class="image" src="{{ profile.image.url }}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
-                {% else %}
+                    <img class="image" src="{{ profile.image.url }}" alt="user_image" width="28" height="28"
+                         style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
+                {% elif backends.associated %}
                     {% for ass in backends.associated %}
                       {% if ass.provider == 'google-oauth2' %}
                         <div class="social_image">
-                            <img src="{{ass.extra_data.picture}}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
+                            <img src="{{ass.extra_data.picture}}" alt="user_image" width="28" height="28"
+                                 style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
                         </div>
                       {% elif ass.provider == 'facebook' %}
                         <div class="social_image">
-                            <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
+                            <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="28" height="28"
+                                 style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ user.username }}">
                         </div>
                       {% else %}
-                          <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="28" height="28" style="border-radius: 50%" title="{{ user.username }}">
+                          <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="28"
+                               height="28" style="border-radius: 50%" title="{{ user.username }}">
                       {% endif %}
                     {% endfor %}
+                {% else %}
+                    <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="28"
+                         height="28" style="border-radius: 50%" title="{{ user.username }}">
                 {% endif %}
             </li>
             <li class="hat_li_logout">
                 <a href="/logout/" style="color:red;">
                     <label class="icon_out"></label>
-                    Logout
+                    Log out
                 </a>
             </li>
         </ol>
@@ -130,13 +152,13 @@
             <li class="hat_li_login">
                 <a href="/login/">
                     <label class="icon_login"></label>
-                    Login
+                    Log in
                 </a>
             </li>
             <li class="hat_li_login">
                 <a style="color: #00cf45;" href="{% url 'register' %}">
                     <label class="icon_register"></label>
-                    Registration
+                    Sign up
                 </a>
             </li>
          </ol>
@@ -147,6 +169,7 @@
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+
     <footer>
         <p>© 2021, diary.by
             <label class="contact">Contact: antonkomp@gmail.com

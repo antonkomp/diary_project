@@ -5,4 +5,4 @@ from django import forms
 class RecordForm(forms.ModelForm):
     class Meta:
         model = Record
-        fields = ('heading', 'text', 'image', 'delete_image')
+        fields = ('header', 'text', 'image', 'delete_image',)

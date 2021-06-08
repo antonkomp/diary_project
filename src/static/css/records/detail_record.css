@@ -51,3 +51,9 @@ h3 {
         -ms-transform: scale(1.06);
         transform: scale(1.06);
         }
+#header_entry {
+    word-wrap: break-word;
+}
+#text_entry {
+    word-wrap: break-word;
+}

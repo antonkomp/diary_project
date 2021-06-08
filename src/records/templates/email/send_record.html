@@ -1,8 +1,10 @@
 Hello {{ user }},
-<lable>this record from your diary.</lable><br>
+<lable>this entry from your diary.</lable><br>
 <p>Date: {{ form.date }}</p>
-<p>Heading: {{ form.heading }}</p>
-<p>Text: {{ form.text }}</p>
+<p>Header: {{ form.header }}</p>
+{% if form.text %}
+    <p>Text: {{ form.text }}</p>
+{% endif %}
 {% if form.image %}
     <img src="cid:{{ form.image_filename }}" alt="connect" style="max-height:400px">
 {% endif %}

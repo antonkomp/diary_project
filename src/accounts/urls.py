@@ -1,7 +1,8 @@
 from django.urls import path
 from django.conf.urls import url
 from .views import main, login_user, logout, registr_user, register_confirm, profile, edit, \
-    account, message, message_details, send_message, delete_message, open_image_message, api, APIUser, APIUserEdit, APIProfile, APIProfileEdit, APIAccount
+    account, message, message_details, send_message, delete_message, open_image_message, api, APIUser, APIUserEdit,\
+    APIProfile, APIProfileEdit, APIAccount, validate_username
 
 
 urlpatterns = [
@@ -24,5 +25,6 @@ urlpatterns = [
     path('api/profile/get/', APIProfile.as_view()),
     path('api/profile/edit/', APIProfileEdit.as_view()),
     path('api/account/', APIAccount.as_view()),
+    path('validate_username', validate_username, name='validate_username')
     ]
 

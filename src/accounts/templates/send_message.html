@@ -15,7 +15,7 @@
     {% csrf_token %}
     <h3>Send message</h3>
     <p class="input_text"><label>Recipient:</label><br>{{ form.recipient }}<span style="font-size: 16px; color: grey;"> - registered user</span></p>
-    <p class="input_text"><label>Heading:</label><br>{{ form.heading }}</p>
+    <p class="input_text"><label>Header:</label><br>{{ form.header }}</p>
     <p></p><label>Text:</label><br>{{ form.text }}</p>
     <p class="input_image"><label>Image: </label><br>{{ form.image }}</p>
     <p><label>Delete image:</label>{{ form.delete_image }}<br></p>

@@ -16,7 +16,7 @@
         <div class="avatar">
             {% if profile.image %}
                 <img class="image" src="{{ profile.image.url }}" alt="user_image">
-            {% else %}
+            {% elif backends.associated %}
                 {% for ass in backends.associated %}
                   {% if ass.provider == 'google-oauth2' %}
                     <div class="social_image">
@@ -30,42 +30,44 @@
                       <img class="image_default" src="{% static 'image/anonymous.jpg' %}" width="150" height="150">
                   {% endif %}
                 {% endfor %}
+            {% else %}
+                <img class="image_default" src="{% static 'image/anonymous.jpg' %}" width="150" height="150">
             {% endif %}
         </div>
         {% if user.first_name %}
-            <label>Fisrt name: {{ user.first_name }}</label><br>
+            <p id="first_name">Fisrt name: {{ user.first_name }}</p>
         {% endif %}
         {% if user.last_name %}
-            <label>Last name: {{ user.last_name }}</label><br>
+            <p id="last_name">Last name: {{ user.last_name }}</p>
         {% endif %}
         {% if user.email %}
-            <label>Email: {{ user.email }}</label><br>
+            <p id="email">Email: {{ user.email }}</p>
         {% endif %}
         {% if profile.birthday %}
-            <label>Birthday: {{ profile.birthday }}</label><br>
-            <label>Age: {{ profile.age }}</label><br>
+            <p id="birthday">Birthday: {{ profile.birthday }}</p>
+            <p id="age">Age: {{ profile.age }}</p>
         {% endif %}
         {% if profile.location %}
-            <label>Location: {{ profile.location }}</label><br>
+            <p id="location">Location: {{ profile.location }}</p>
         {% endif %}
         {% if profile.website %}
-            <label>Website: <a href="{{ profile.website }}">{{ profile.website }}</a></label><br>
+            <p id="website">Website: <a href="{{ profile.website }}">{{ profile.website }}</a></p>
         {% endif %}
         {% if profile.bio %}
-            <label>Bio: {{ profile.bio }}</label><br>
+            <p id="bio">Bio: {{ profile.bio }}</p>
         {% endif %}
         {% for ass in backends.associated %}
             {% if ass.provider == 'google-oauth2' %}
-                <label> Signed in via:  Google </label><br>
+                <p> Signed in via:  Google </p>
             {% endif %}
             {% if ass.provider == 'facebook' %}
-                <label> Signed in via: <a href="{{ass.extra_data.link}}">Facebook</a></label><br>
+                <p> Signed in via: <a href="{{ass.extra_data.link}}">Facebook</a></p>
             {% endif %}
             {% if ass.provider == 'linkedin-oauth2' %}
-                <label> Signed in via:  Linkedin </label><br>
+                <p> Signed in via:  Linkedin </p>
             {% endif %}
         {% endfor %}
-        <label>Registered since: {{ user.date_joined }} </label><br><br>
+        <p>Registered since: {{ user.date_joined }} </p>
     </form>
     <label>Account type: <a class="acc_type" href="{% url 'account' %}">{{ profile.account_type }}</a></label>
     {% if profile.account_type == "Standard" %}

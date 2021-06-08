@@ -36,7 +36,7 @@ class Profile(models.Model):
 
 
 @receiver(pre_delete, sender=Profile)
-def record_delete(sender, instance, **kwargs):
+def image_profile_delete(sender, instance, **kwargs):
     instance.image.delete(False)
 
 
@@ -80,9 +80,9 @@ class Messages(models.Model):
     date = models.DateTimeField(auto_now=True)
     recipient = models.CharField(max_length=150)
     sender = models.CharField(max_length=150, null=True, blank=True)
-    heading = models.CharField(max_length=70, null=True, blank=True)
+    header = models.CharField(max_length=70, null=True, blank=True)
     text = models.TextField(max_length=9999)
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(upload_to='image_messages/', blank=True, null=True)
     delete_image = models.BooleanField(default=False)
 
     def __str__(self):
@@ -92,9 +92,16 @@ class Messages(models.Model):
         ordering = ('-date',)
 
 
+@receiver(pre_delete, sender=Messages)
+def image_message_delete(sender, instance, **kwargs):
+    instance.image.delete(False)
+
+
 class PageView(models.Model):
     url = models.CharField(max_length=70, blank=True, null=True, unique=True)
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'{self.url} - {self.views}'
+
+

@@ -14,12 +14,12 @@
     <h3>Message details</h3>
     <p>Date: {{ message.date }}</p>
     <p>Sender: {{ message.sender }}</p>
-    <p>Heading: {{ message.heading }}</p>
+    <p>Header: {{ message.header }}</p>
     <p>Text: {{ message.text }}</p>
 
     {% if message.image %}
-        <p>Image: <a class="image_url" href="{% url 'open_image_message' message.id %}" target="_blank"> {{ message.image }} </a></p>
-        <img class="image" src="{{ message.image.url }}" alt="connect">
+        <a class="image_url" href="{% url 'open_image_message' message.id %}" target="_blank">
+            <img class="image" src="{{ message.image.url }}" alt="connect"> </a>
     {% endif %}
 
     <form action={% url "delete_message" message.id %} method="POST">

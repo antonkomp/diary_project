@@ -1,17 +1,57 @@
 {% extends "base.html" %}
-{% block title %} Registration user {% endblock %}
+{% load crispy_forms_tags %}
+{% block title %} Sign up {% endblock %}
 {% load static %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'css/accounts/register.css' %}" />
 {% endblock %}
 {% block content %}
-    <h3>Registration user</h3>
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %} alert-danger {% else %} alert-info {% endif %}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    <h3>Sign up</h3>
     <form action={% url "register" %} method="POST">
         {% csrf_token %}
         <div class="li_size">
-            {{ form.as_p }}
+            {{ form|crispy }}
         </div>
-        <input class="reg_buttons" type="submit" value="Register"/>
+        <input class="reg_buttons" type="submit" value="Sign up"/>
         <input class="reg_buttons" type="reset" value="Clear"/>
+        <br><br>
     </form>
+    <script>
+        $(document).ready(function () {
+            // catch the form's submit event
+            $('#id_username').keyup(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    url: "{% url 'validate_username' %}",
+                    // on success
+                    success: function (response) {
+                        if (response.is_taken == true) {
+                            $('#usernameError').remove();
+                            $('#id_username').removeClass('is-valid').addClass('is-invalid');
+                            $('#id_username').after('<div class="invalid-feedback d-block" id="usernameError">This username is not available!</div>')
+                            $('#id_username').css({"border-color": "red", "background": "#FDF5F5"});
+                        }
+                        else {
+                            $('#id_username').removeClass('is-invalid').addClass('is-valid');
+                            $('#usernameError').remove();
+                            $('#id_username').css({"border-color": "black", "background": "#eceff3"});
+                        }
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                return false;
+            });
+        })
+    </script>
 {% endblock %}

@@ -13,12 +13,23 @@
     {% endfor %}
     <h3 style="color:red;">Details entry</h3>
     <p>Date: {{ record.date }}</p>
-    <p>Heading: {{ record.heading }}</p>
-    <p>Text: {{ record.text }}</p>
-
+    <p id="header_entry">Header: {{ record.header }}</p>
+    {% if record.text %}
+        <p id="text_entry">Text: {{ record.text }}</p>
+    {% endif %}
     {% if record.image %}
-        <p>Image: <a class="image_url" href="{% url 'open_image' record.id %}" target="_blank"> {{ record.image }} </a></p>
-        <img class="image" src="{{ record.image.url }}" alt="connect" style="max-height:300px">
+        <a class="image_url" href="{% url 'open_image' record.id %}" target="_blank">
+            <img class="image" src="{{ record.image.url }}" alt="connect" style="max-height:300px"> </a><br><br>
+    {% endif %}
+    {% if record.voice_record %}
+        <div class="voice_record">
+            <audio
+                controls
+                src="{{ record.voice_record.url }}">
+                    Your browser does not support the
+                    <code>audio</code> element.
+            </audio>
+        </div><br>
     {% endif %}
 
     <form action={% url "edit_record" record.id %} method="GET">

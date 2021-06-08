@@ -6,22 +6,21 @@ h3 {
 .all_records {
 	color: green;
 	}
-#id_heading {
-        cursor: pointer;
-        color: black;
+#id_header {
+    color: black;
 	background: white;
 	border: 1px solid;
-        padding: .275rem .55rem;
-        border-radius: .25rem;
-        }
+    padding: .275rem .55rem;
+    border-radius: .25rem;
+    width: 100%;
+    }
 textarea {
-	cursor: pointer;
-        color: black;
+    color: black;
 	background: white;
 	border: 1px solid;
-        padding: .275rem .55rem;
-        border-radius: .25rem;
-	width: 600px;
+    padding: .275rem .55rem;
+    border-radius: .25rem;
+	width: 100%;
 	height: 240px;
 	resize: none;
 	font-family: sans-serif;
@@ -29,28 +28,44 @@ textarea {
 }
 .save {
 	cursor: pointer;
-        background: #1a73e8;
-        color: white;
+    background: #1a73e8;
+    color: white;
 	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .55rem;
+    padding: .275rem .55rem;
+    border-radius: .55rem;
 }
 input:hover {
-        -webkit-transform: scale(1.04);
-        -ms-transform: scale(1.04);
-        transform: scale(1.04);
-        }
+    -webkit-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    transform: scale(1.01);
+    }
 .save:hover {
-        -webkit-transform: scale(1.06);
-        -ms-transform: scale(1.06);
-        transform: scale(1.06);
-        }
+    -webkit-transform: scale(1.06);
+    -ms-transform: scale(1.06);
+    transform: scale(1.06);
+    }
 textarea:hover {
-        -webkit-transform: scale(1.01);
-        -ms-transform: scale(1.01);
-        transform: scale(1.01);
-        }
+    -webkit-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    transform: scale(1.01);
+    }
 .input_image input:hover {
-        -webkit-transform: scale(1.01);
-        -ms-transform: scale(1.01);
-        transform: scale(1.01);
+    -webkit-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    transform: scale(1.01);
+    }
+.asteriskField {
+    display: none;
+}
+#id_image {
+    cursor: pointer;
+}
+#headerError {
+    font-size: 11px;
+    color: red;
+}
+#loaded_image {
+    word-wrap: break-word;
+    font-size: 13px;
+    color: gray;
+}

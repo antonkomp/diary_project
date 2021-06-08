@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block title %} Edit entry {% endblock %}
 {% load static %}
 {% block static %}
@@ -8,13 +9,61 @@
     <h3>Edit entry</h3>
     <form action={% url "edit_record" record_id=record.id %} method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         {% if record.image %}
-            <label>Loaded: {{ record.image }} </label>
-            <br><br>
+            <p id="loaded_image">Loaded: {{ record.image }} </p>
         {% endif %}
-        <input class="save" type="submit" value="Save"/>
+        {% if record.voice_record %}
+            <div class="voice_record">
+                <audio
+                    controls
+                    src="{{ record.voice_record.url }}">
+                        Your browser does not support the
+                        <code>audio</code> element.
+                </audio>
+            </div>
+        {% endif %}
+        <br>
+        <button class="save" id="save_btn" type="submit">Save</button>
     </form>
     <hr>
     <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br><br>
+    <script>
+        if ($("#loaded_image").length > 0){
+           $("#div_id_delete_image").show()
+        }
+        else {
+           $("#div_id_delete_image").hide()
+        }
+        $(".clearablefileinput").click(function(){
+            setTimeout(loadAfterTime, 1500);
+        });
+        function loadAfterTime() {
+            $("#div_id_delete_image").show()
+        }
+        $("#id_delete_image,#id_header").keydown(function(event){
+            if(event.keyCode == 13){
+              event.preventDefault();
+                return false;
+            }
+        });
+        $('#id_header').keyup(function () {
+            var header_value = document.getElementById('id_header').value;
+            if (/^ *$/.test(header_value)) {
+                $('#headerError').remove();
+                $('#id_header').removeClass('is-valid').addClass('is-invalid');
+                $('#id_header').after('<div class="invalid-feedback" id="headerError">The header is empty!</div>')
+                $('#id_header').css({"border-color": "red", "background": "#FDF5F5"});
+                $('#save_btn').attr("disabled", true);
+                $('#save_btn').css({"background": "#9c9c9c"});
+            }
+            else {
+                $('#id_header').removeClass('is-invalid').addClass('is-valid');
+                $('#headerError').remove();
+                $('#id_header').css({"border-color": "black", "background": "#eceff3"});
+                $('#save_btn').removeAttr("disabled");
+                $('#save_btn').css({"background": "#1a73e8"});
+            }
+        });
+    </script>
 {% endblock %}

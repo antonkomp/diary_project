@@ -45,3 +45,6 @@ input:hover {
     font-family: FontAwesome;
     margin-left: 10px;
 }
+.asteriskField {
+    display: none;
+}

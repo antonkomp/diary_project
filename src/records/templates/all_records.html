@@ -19,21 +19,21 @@
             <button class="search_but" type="submit"></button>
         </div>
         {% if keyword_search != '' %}
-            <p>
+            <p class="search_result">
                 Result of matches by: '{{ keyword_search|truncatechars:40 }}'
-            </p>
+            </p><br>
         {% else %}
             <br>
         {% endif %}
     </form>
+    <a class="add_record" href="{% url 'add_record' %}"> Add entry </a>
     </div>
-        <a class="add_record" href="{% url 'add_record' %}"> Add entry </a>
     <!-- new table -->
         <div class="content_entries">
         <div class="tableBlock">
             <div style="display: flex; box-sizing: border-box;">
                 <div class="head_col">Date</div>
-                <div class="head_col">Heading</div>
+                <div class="head_col">Header</div>
                 <div class="head_col head_right">Action</div>
 
             </div>
@@ -46,18 +46,24 @@
                     </a>
                 </div>
                 <div class="entr_col">
-                    <a href="{% url 'detail_record' record.id %}"><label class="fa fa-navicon"></label>
-                        {{ record.heading|truncatechars:40 }}
+                    <a href="{% url 'detail_record' record.id %}" title="{{ record.text|truncatechars:85 }}"><label class="fa fa-navicon"></label>
+                        {{ record.header|truncatechars:40 }}
                     </a>
+                    {% if record.image %}
+                        <span id="icon_image"><i class="fa fa-image"></i></span>
+                    {% endif %}
+                    {% if record.voice_record %}
+                        <span id="icon_mic"><i class="fa fa-microphone"></i></span>
+                    {% endif %}
                 </div>
                 <div class="right_side entr_col" >
-                    <a href="{% url 'detail_record' record.id %}">
+                    <a href="{% url 'detail_record' record.id %}" title="Show">
                         <button class="btn"><i class="fa fa-eye"></i></button>
                     </a>
-                    <a href="{% url 'edit_record' record.id %}">
+                    <a href="{% url 'edit_record' record.id %}" title="Edit">
                         <button class="btn"><i class="fa fa-edit"></i></button>
                     </a>
-                    <form class="peren" action={% url "delete_record" record.id %} method="POST">
+                    <form class="peren" action={% url "delete_record" record.id %} method="POST" title="Delete">
                         {% csrf_token %}
                         <button class="btn"><i class="fa fa-trash"></i></button>
                     </form>

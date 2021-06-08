@@ -187,3 +187,40 @@
             font-family: FontAwesome;
             margin-left: 20px;
         }
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border: 2px solid #bee5eb;
+        }
+        .alert-warning {
+            color: #0c5460;
+            background-color: #F3EBC2;
+            border: 2px solid #E9D3A4;
+        }
+        .alert-danger {
+            color: #0c5460;
+            background-color: #F1D1D1;
+            border: 2px solid #EBBEBE;
+        }
+        .alert {
+            position: relative;
+            padding: .5rem 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border-radius: .25rem;
+            font-size: 16px;
+        }
+        button.close {
+            padding: 0;
+            background-color: transparent;
+            border: 0;
+        }
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #000;
+            text-shadow: 0 1px 0 #fff;
+            opacity: .5;
+        }

@@ -29,7 +29,7 @@
             <tr>
                 <th>Date</th>
                 <th>Sender</th>
-                <th>Heading</th>
+                <th>Header</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
                 <tr>
                     <td> <a href="{% url 'message_details' mess.id %}">{{ mess.date }}</a> </td>
                     <td> <a href="{% url 'message_details' mess.id %}">{{ mess.sender }}</a> </td>
-                    <td> <a href="{% url 'message_details' mess.id %}">{{ mess.heading|truncatechars:40 }}</a> </td>
+                    <td> <a href="{% url 'message_details' mess.id %}">{{ mess.header|truncatechars:40 }}</a> </td>
                 </tr>
             {% endfor %}
         </tbody>

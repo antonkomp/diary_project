@@ -13,6 +13,7 @@ h3 {
 	border: 1px solid;
     padding: .275rem .55rem;
     border-radius: .25rem;
+    width: 100%;
     }
 textarea {
 	cursor: pointer;
@@ -21,7 +22,7 @@ textarea {
 	border: 1px solid;
     padding: .275rem .55rem;
     border-radius: .25rem;
-	width: 600px;
+	width: 100%;
 	height: 240px;
 	resize: none;
 	font-family: sans-serif;

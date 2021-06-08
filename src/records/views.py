@@ -9,6 +9,7 @@ from django.template import loader
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from email.mime.image import MIMEImage
+from email.mime.audio import MIMEAudio
 import smtplib
 from .serializers import RecordsSerializer, CreateRecordSerializer, UpdateRecordSerializer, DeleteRecordSerializer
 from rest_framework import generics
@@ -18,6 +19,8 @@ from PIL import Image
 import io
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+import json
 
 
 MAX_SIZE = 1024
@@ -45,13 +48,23 @@ def add_record(request):
         if form.is_valid():
             us = form.save(commit=False)
             us.user = request.user
+            if request.is_ajax():
+                us.header = request.POST.get('header')
+                us.text = request.POST.get('text')
+                us.voice_record = request.FILES.get('audio_data')
+                us.image = request.FILES.get('image')
+                us.delete_image = json.loads(request.POST.get('delete_image').lower())
+                messages.success(request, 'New entry with voice record added!')
             if us.image.name is not None and us.delete_image:
                 us.image = ''
-            elif us.image.name is not None and us.delete_image is False and us.heading != '!original!':
+            elif us.image.name is not None and us.delete_image is False and us.header != '!original!':
                 resize_image(us)
             us.save()
+            if request.is_ajax():
+                return JsonResponse({'success': True, })
             messages.success(request, 'New entry added!')
             return redirect('all_records')
+        return JsonResponse({'success': False, })
     else:
         form = RecordForm()
         profile_image = Profile.objects.filter(user_id=request.user.id).first()
@@ -64,7 +77,7 @@ def all_records(request, page_number=1):
         PageView.objects.get_or_create(url='records')
         entrance_url('records')
         search_query = request.GET.get('s', '')
-        rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(heading__icontains=search_query) |
+        rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(header__icontains=search_query) |
                    Q(text__icontains=search_query))) if search_query else Record.objects.filter(user_id=request.user.id)
         current_page = Paginator(rec_user, 25)
         quantity_records = 0
@@ -105,7 +118,7 @@ def edit_record(request, record_id):
         if form.is_valid():
             data = form.cleaned_data
             record = Record.objects.get(id=record_id)
-            record.heading = data['heading']
+            record.header = data['header']
             record.text = data['text']
             if data['image'] is not None:
                 record.image.delete()
@@ -114,7 +127,7 @@ def edit_record(request, record_id):
             if record.delete_image:
                 record.image.delete()
             record.save()
-            messages.success(request, 'Record details updated.')
+            messages.success(request, 'The entry details updated.')
             return redirect('detail_record', record_id)
 
 
@@ -127,7 +140,7 @@ def delete_record(request, record_id):
     if request.method == 'POST':
         record = Record.objects.filter(id=record_id).first()
         record.delete()
-        messages.success(request, 'Record was deleted.')
+        messages.success(request, 'The entry deleted.')
         return redirect('all_records')
 
 
@@ -152,7 +165,7 @@ def send_record(request, record_id):
             record = Record.objects.filter(id=record_id).first()
             user = User.objects.filter(id=request.user.id).first()
 
-            subject, from_email, to = 'Sending your record from Diary', 'antonkomp1@gmail.com', user.email
+            subject, from_email, to = 'Sending your entry from Diary', 'antonkomp1@gmail.com', user.email
             html_content = loader.render_to_string('email/send_record.html', {'user': user, 'form': record}).strip()
             msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
             msg.content_subtype = 'html'
@@ -161,8 +174,12 @@ def send_record(request, record_id):
                 image = MIMEImage(record.image.read())
                 image.add_header('Content-ID', '<{}>'.format(record.image_filename))
                 msg.attach(image)
+            if record.voice_record:
+                voice = MIMEAudio(record.voice_record.read())
+                voice.add_header('Content-Disposition', 'attachment', filename=record.voice_filename)
+                msg.attach(voice)
             msg.send()
-            messages.success(request, 'The record was successfully sent to email!')
+            messages.success(request, 'The entry was successfully sent to email!')
         except smtplib.SMTPAuthenticationError:
             messages.error(request, 'Server side error! The record was not sent. '
                                     'Please inform the administrator about it.')

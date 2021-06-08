@@ -34,7 +34,12 @@ span {
 	font-size: 13px;
 	color: #56595A;
 	}
-.li_size li {
+.help-block, .li_size li {
 	font-size: 13px;
 	color: #56595A;
+}
+
+#usernameError {
+    font-size: 11px;
+	color: red;
 }
