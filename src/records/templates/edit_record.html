@@ -4,10 +4,12 @@
 {% load static %}
 {% block static %}
     <link rel="stylesheet" href="{% static 'css/records/edit_record.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/voice_record.css' %}" />
+    <script type="text/javascript" src="{% static 'js/recorder.js' %}"></script>
 {% endblock %}
 {% block content %}
     <h3>Edit entry</h3>
-    <form action={% url "edit_record" record_id=record.id %} method="POST" enctype="multipart/form-data">
+    <form action='{% url "edit_record" record_id=record.id %}' method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         {% if record.image %}
@@ -21,14 +23,29 @@
                         Your browser does not support the
                         <code>audio</code> element.
                 </audio>
+                <button id="del_exist_voice" type="button"><i class='fa fa-trash'></i></button>
             </div>
+        {% else %}
+            <input type="button" class="but_voice_record" value="Voice record">
         {% endif %}
-        <br>
+        <div class="voice_recording" id="id_voice_record" style="display:none">
+            <div id="controls">
+             <button id="recordButton" type='button'>Record</button>
+             <button id="pauseButton" disabled type='button'>Pause</button>
+             <button id="stopButton" disabled>Stop</button>
+            </div>
+            <ol id="recordingsList"></ol>
+        </div>
         <button class="save" id="save_btn" type="submit">Save</button>
+        <script type="text/javascript" src="{% static 'js/voice_record_edit.js' %}"></script>
     </form>
     <hr>
     <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br><br>
     <script>
+        var id  = {{ record.id }}
+        $(".but_voice_record").click(function(){
+            $(".voice_recording").toggle();
+        });
         if ($("#loaded_image").length > 0){
            $("#div_id_delete_image").show()
         }
@@ -64,6 +81,20 @@
                 $('#save_btn').removeAttr("disabled");
                 $('#save_btn').css({"background": "#1a73e8"});
             }
+        });
+        $('#del_exist_voice').click(function () {
+            $(".voice_record").remove();
+            $("#id_voice_record").css({"display": "block", "margin-top": "1em"});
+            $.ajax({
+                url: "{% url 'delete_voice_record' record_id=record.id %}",
+                success: function (data) {
+                    console.log('response' + JSON.stringify(data));
+                },
+                error: function (data) {
+                    console.log('response' + JSON.stringify(data));
+                }
+            });
+            return false;
         });
     </script>
 {% endblock %}

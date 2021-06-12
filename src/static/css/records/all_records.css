@@ -262,7 +262,7 @@ h3 {
 	display: flex;
     justify-content: center;
 }
-#icon_image, #icon_mic {
+#icon_image, #icon_mic, #icon_edit {
     color: #D7DCDEFF;
     margin-left: 0.3em;
 }

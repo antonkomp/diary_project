@@ -44,6 +44,9 @@
                     <a href="{% url 'detail_record' record.id %}"><label class="fa fa-calendar-check-o"></label>
                         {{ record.date }}
                     </a>
+                    {% if record.check_edit %}
+                        <span id="icon_edit"><i class="fa fa-edit"></i></span>
+                    {% endif %}
                 </div>
                 <div class="entr_col">
                     <a href="{% url 'detail_record' record.id %}" title="{{ record.text|truncatechars:85 }}"><label class="fa fa-navicon"></label>

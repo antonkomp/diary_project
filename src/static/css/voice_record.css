@@ -41,13 +41,6 @@
 #controls button:first-child {
   margin-left: 0;
 }
-audio {
-  display: block;
-  width: 100%;
-  margin-top: 0.6rem;
-  margin-bottom: 1.5em;
-  margin-left: -1em;
-}
 s
 li {
   list-style: none;
@@ -67,3 +60,20 @@ audio::-webkit-media-controls-play-button,
      audio::-webkit-media-controls-panel {
      background-color: #dadada;
      }
+#del_voice_record, #del_exist_voice {
+    margin-bottom: 0.5em;
+    margin-left: 3px;
+    margin-right: -5px;
+    background: #d32525;
+    color: #fafafa;
+}
+#recordingsList li, .voice_record {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.voice_record {
+    margin-top: 1em;
+    margin-left: 2em;
+    margin-bottom: 1em;
+}

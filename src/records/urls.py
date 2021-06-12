@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 from .views import add_record, all_records, detail_record, edit_record, \
-     delete_record, open_image, send_record, APIRecords, APICreateRecord, APIUpdateRecord, APIDeleteRecord
+     delete_record, open_image, send_record, APIRecords, APICreateRecord, APIUpdateRecord, APIDeleteRecord, \
+     delete_voice_record
 
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     path('api/record/update/<int:pk>/', APIUpdateRecord.as_view()),
     path('api/record/delete/<int:pk>/', APIDeleteRecord.as_view()),
     re_path(r'^page/(\d+)/$', all_records, name='all_records'),
+    path('delete_voice_record/<int:record_id>/', delete_voice_record, name='delete_voice_record'),
     ]

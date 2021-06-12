@@ -27,6 +27,7 @@ textarea {
 	font-size: 14px;
 }
 .save {
+    display: flex;
 	cursor: pointer;
     background: #1a73e8;
     color: white;
@@ -68,4 +69,23 @@ textarea:hover {
     word-wrap: break-word;
     font-size: 13px;
     color: gray;
+}
+audio {
+  display: block;
+  width: 100%;
+  max-width: 20em;
+  margin-top: 0.3rem;
+  margin-bottom: 0.4em;
+  margin-left: -1.5em;
+}
+.but_voice_record {
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+}
+#icon_mic {
+    margin-left: 0.6em;
+    font-size: 15px;
+}
+#div_id_delete_image {
+    margin-top: 0.3em;
 }

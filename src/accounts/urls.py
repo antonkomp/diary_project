@@ -25,6 +25,6 @@ urlpatterns = [
     path('api/profile/get/', APIProfile.as_view()),
     path('api/profile/edit/', APIProfileEdit.as_view()),
     path('api/account/', APIAccount.as_view()),
-    path('validate_username', validate_username, name='validate_username')
+    path('validate_username', validate_username, name='validate_username'),
     ]
 

@@ -8,6 +8,7 @@ import os
 class Record(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateTimeField(auto_now=True)
+    check_edit = models.BooleanField(default=False)
     header = models.CharField(max_length=70, default='no_theme')
     text = models.TextField(max_length=9999, blank=True, null=True)
     image = models.ImageField(upload_to='image_entries/', blank=True, null=True)

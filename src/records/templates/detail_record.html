@@ -11,7 +11,11 @@
             {{ message }}
         </div>
     {% endfor %}
-    <h3 style="color:red;">Details entry</h3>
+    {% if record.check_edit %}
+        <h3 style="color:red;">Details entry (edited)</h3>
+    {% else %}
+        <h3 style="color:red;">Details entry</h3>
+    {% endif %}
     <p>Date: {{ record.date }}</p>
     <p id="header_entry">Header: {{ record.header }}</p>
     {% if record.text %}

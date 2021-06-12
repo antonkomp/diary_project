@@ -57,3 +57,11 @@ h3 {
 #text_entry {
     word-wrap: break-word;
 }
+audio::-webkit-media-controls-play-button,
+     audio::-webkit-media-controls-panel {
+     background-color: #dadada;
+     }
+audio {
+    width: 100%;
+    max-width: 20em;
+}

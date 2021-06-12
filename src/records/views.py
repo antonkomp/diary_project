@@ -118,18 +118,35 @@ def edit_record(request, record_id):
         if form.is_valid():
             data = form.cleaned_data
             record = Record.objects.get(id=record_id)
-            record.header = data['header']
-            record.text = data['text']
-            if data['image'] is not None:
-                record.image.delete()
-                record.image = data['image']
-            record.delete_image = data['delete_image']
-            if record.delete_image:
-                record.image.delete()
+            if request.is_ajax():
+                record.header = request.POST.get('header')
+                record.text = request.POST.get('text')
+                record.voice_record = request.FILES.get('audio_data')
+                record.image = request.FILES.get('image')
+                record.delete_image = json.loads(request.POST.get('delete_image').lower())
+            else:
+                record.header = data['header']
+                record.text = data['text']
+                if data['image'] is not None:
+                    record.image.delete()
+                    record.image = data['image']
+                record.delete_image = data['delete_image']
+                if record.delete_image:
+                    record.image.delete()
+            record.check_edit = True
             record.save()
             messages.success(request, 'The entry details updated.')
+            if request.is_ajax():
+                return JsonResponse({'success': True, })
             return redirect('detail_record', record_id)
+        return JsonResponse({'success': False, })
 
+
+def delete_voice_record(request, record_id):
+    """Delete voice record"""
+    record = Record.objects.get(id=record_id)
+    record.voice_record.delete()
+    return JsonResponse({'success': True, })
 
 @login_required
 def delete_record(request, record_id):

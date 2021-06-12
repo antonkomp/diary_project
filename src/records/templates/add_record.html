@@ -12,7 +12,7 @@
         {% csrf_token %}
         <h3>Add entry</h3>
         {{ form|crispy }}
-        <input type="button" class="but_voice_record" value="Voice record"><br><br>
+        <input type="button" class="but_voice_record" value="Voice record">
         <div class="voice_recording" id="id_voice_record" style="display:none">
             <div id="controls">
              <button id="recordButton" type='button'>Record</button>
@@ -25,7 +25,7 @@
         <script type="text/javascript" src="{% static 'js/voice_record.js' %}"></script>
     </form>
     <hr>
-    <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br>
+    <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br><br>
     <script>
         $(".but_voice_record").click(function(){
             $(".voice_recording").toggle();
