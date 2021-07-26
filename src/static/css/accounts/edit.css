@@ -53,3 +53,7 @@ span {
     background: transparent;
     border: transparent;
     }
+#birthdayError {
+    font-size: 11px;
+    color: red;
+}

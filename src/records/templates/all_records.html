@@ -12,7 +12,7 @@
     </div>
     {% endfor %}
     <div class="search_entries">
-    <form action={% url 'all_records' %} method="GET">
+    <form action="{% url 'all_records' %}" method="GET">
         <h3>My entries ({{ quantity_records }})</h3>
         <div class="search">
             <input class="search_inp" name="s" placeholder="Search" type="text">
@@ -66,7 +66,7 @@
                     <a href="{% url 'edit_record' record.id %}" title="Edit">
                         <button class="btn"><i class="fa fa-edit"></i></button>
                     </a>
-                    <form class="peren" action={% url "delete_record" record.id %} method="POST" title="Delete">
+                    <form class="peren" action='{% url "delete_record" record.id %}' method="POST" title="Delete">
                         {% csrf_token %}
                         <button class="btn"><i class="fa fa-trash"></i></button>
                     </form>

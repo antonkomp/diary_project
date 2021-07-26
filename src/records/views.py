@@ -33,11 +33,11 @@ def entrance_url(url):
 
 def resize_image(us):
     if us.image.width > MAX_SIZE or us.image.height > MAX_SIZE:
-        img = Image.open(us.image)
-        img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
-        thumb_io = io.BytesIO()
-        img.save(thumb_io, img.format, quality=86)
-        us.image.save(us.image.name, ContentFile(thumb_io.getvalue()), save=False)
+        with Image.open(us.image) as img:
+            img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
+            thumb_io = io.BytesIO()
+            img.save(thumb_io, img.format, quality=86)
+            us.image.save(us.image.name, ContentFile(thumb_io.getvalue()), save=False)
 
 
 @login_required
@@ -94,6 +94,9 @@ def all_records(request, page_number=1):
 def detail_record(request, record_id):
     if request.method == "GET":
         record = Record.objects.filter(id=record_id).first()
+        if record is None:
+            messages.error(request, f'Entry {record_id} does not exist!')
+            return redirect('all_records')
         if record.user_id != request.user.id:
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)
@@ -106,6 +109,9 @@ def detail_record(request, record_id):
 def edit_record(request, record_id):
     if request.method == "GET":
         record = Record.objects.filter(id=record_id).first()
+        if record is None:
+            messages.error(request, f'Entry {record_id} does not exist!')
+            return redirect('all_records')
         if record.user_id != request.user.id:
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)

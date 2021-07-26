@@ -133,11 +133,11 @@ def profile(request):
 
 def upload_avatar(prof, prof_old):
     if prof.image.width > MAX_SIZE or prof.image.height > MAX_SIZE:
-        img = Image.open(prof.image)
-        img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
-        thumb_io = io.BytesIO()
-        img.save(thumb_io, img.format, quality=90)
-        prof.image.save(prof.image.name, ContentFile(thumb_io.getvalue()), save=False)
+        with Image.open(prof.image) as img:
+            img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
+            thumb_io = io.BytesIO()
+            img.save(thumb_io, img.format, quality=90)
+            prof.image.save(prof.image.name, ContentFile(thumb_io.getvalue()), save=False)
     prof_old.image = prof.image
 
 
@@ -163,6 +163,9 @@ def edit(request):
             form.save()
             messages.success(request, 'Profile edited.')
             return redirect('profile')
+        else:
+            messages.error(request, 'Your input is invalid!')
+            return redirect('edit')
     else:
         form = ProfileForm(
             instance=prof,

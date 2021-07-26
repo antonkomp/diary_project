@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="{% static 'css/accounts/edit.css' %}" />
 {% endblock %}
 {% block content %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %} alert-danger {% else %} alert-info {% endif %}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
     <h3>Edit profile</h3>
     <p>Use the form below to make changes to this user profile.</p>
     <form action={% url 'edit' %} enctype="multipart/form-data" method="POST">
@@ -14,4 +20,22 @@
     </form><br>
     <hr>
     <a class="profile" href="{% url 'profile' %}"> Profile user </a><br><br><br>
+    <script>
+        $('#id_birthday').keyup(function () {
+            var birthday_value = document.getElementById('id_birthday').value;
+            if ((!/^(19[2-9][0-9]|20[0-1][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1-2][0-9]|3[0-1])$/.test(birthday_value))
+            && (/^./.test(birthday_value))) {
+                $('#id_birthday').removeClass('is-valid').addClass('is-invalid');
+                $('#id_birthday').css({"border-color": "red", "background": "#FDF5F5"});
+                $('.edit_save').attr("disabled", true);
+                $('.edit_save').css({"background": "#9c9c9c"});
+            }
+            else {
+                $('#id_birthday').removeClass('is-invalid').addClass('is-valid');
+                $('#id_birthday').css({"border-color": "black", "background": "#eceff3"});
+                $('.edit_save').removeAttr("disabled");
+                $('.edit_save').css({"background": "#1a73e8"});
+            }
+        });
+    </script>
 {% endblock %}

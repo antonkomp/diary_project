@@ -16,7 +16,7 @@ class Profile(models.Model):
                                 help_text="Birthday in YYYY-MM-DD format [used for displaying age].")
     location = models.CharField(max_length=40, blank=True, help_text="Geographic location.")
     website = models.URLField(blank=True, help_text="A personal blog or website.")
-    bio = models.TextField(blank=True, help_text="A brief biography.")
+    bio = models.TextField(max_length=500, blank=True, help_text="A brief biography.")
     image = models.ImageField(upload_to='avatar/', blank=True, null=True)
 
     def __str__(self):
