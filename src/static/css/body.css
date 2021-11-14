@@ -224,3 +224,37 @@
             text-shadow: 0 1px 0 #fff;
             opacity: .5;
         }
+
+header a {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  transition: .3s ease-in-out;
+}
+
+nav ul {
+    list-style: none;
+}
+.top li a:hover { color: #D5B45B; }
+.submenu {
+    background: #777777;
+    position: absolute;
+    left: auto;
+    top: 100%;
+    z-index: 5;
+    width: 165px;
+    opacity: 0.95;
+    transform: scaleY(0);
+    transform-origin: 0 0;
+    transition: .5s ease-in-out;
+}
+.submenu a {
+    color: white;
+    text-align: left;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.top > li:hover .submenu {
+  transform: scaleY(1);
+}

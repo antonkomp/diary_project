@@ -72,6 +72,18 @@ def add_record(request):
 
 
 @login_required
+def my_public_diary(request):
+    context = {}
+    return render(request, 'my_public_diary.html', context)
+
+
+@login_required
+def all_public_diaries(request):
+    context = {}
+    return render(request, 'all_public_diaries.html', context)
+
+
+@login_required
 def all_records(request, page_number=1):
     if request.method == "GET":
         PageView.objects.get_or_create(url='records')
@@ -153,6 +165,7 @@ def delete_voice_record(request, record_id):
     record = Record.objects.get(id=record_id)
     record.voice_record.delete()
     return JsonResponse({'success': True, })
+
 
 @login_required
 def delete_record(request, record_id):
