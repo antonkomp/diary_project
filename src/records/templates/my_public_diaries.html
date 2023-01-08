@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %} My entries {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/records/all_records.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/records/my_public_diaries.css' %}" />
+{% endblock %}
+{% block content %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <h3>My public diaries</h3>
+    <a class="create_new_diary" href="{% url 'create_new_diary' %}"> Create new diary </a><br>
+
+     <!-- new table -->
+        <div class="content_entries">
+        <div class="tableBlock">
+            <div style="display: flex; box-sizing: border-box;">
+                <div class="head_col">Name</div>
+                <div class="head_col">Header</div>
+                <div class="head_col head_right">Action</div>
+            </div>
+            <hr class="hr_head">
+        {% for diary in diaries %}
+            <div class="tableBlock__row">
+                <div class="entr_col">
+                    <a href=""><label class="fa fa-calendar-check-o"></label>
+                        {{ diary.name }}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        </div>
+
+{% endblock %}

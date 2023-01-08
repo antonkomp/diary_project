@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import RecordForm
-from .models import Record
+from .forms import RecordForm, DiaryForm
+from .models import Record, Diary
 from accounts.models import PageView, Profile
 from django.forms import model_to_dict
 from django.contrib import messages
@@ -55,26 +55,42 @@ def add_record(request):
                 us.image = request.FILES.get('image')
                 us.delete_image = json.loads(request.POST.get('delete_image').lower())
                 messages.success(request, 'New entry with voice record added!')
+
             if us.image.name is not None and us.delete_image:
                 us.image = ''
             elif us.image.name is not None and us.delete_image is False and us.header != '!original!':
                 resize_image(us)
+
             us.save()
             if request.is_ajax():
                 return JsonResponse({'success': True, })
+
             messages.success(request, 'New entry added!')
             return redirect('all_records')
+
         return JsonResponse({'success': False, })
     else:
         form = RecordForm()
         profile_image = Profile.objects.filter(user_id=request.user.id).first()
-    return render(request, 'add_record.html', {'form': form, 'profile': profile_image})
+        return render(request, 'add_record.html', {'form': form, 'profile': profile_image})
 
 
 @login_required
-def my_public_diary(request):
-    context = {}
-    return render(request, 'my_public_diary.html', context)
+def create_new_diary(request):
+    """Create new diary"""
+    if request.method == 'POST':
+        form = DiaryForm(request.POST)
+        if form.is_valid():
+            us = form.save(commit=False)
+            us.user = request.user
+            us.save()
+            messages.success(request, 'New diary created!')
+            return redirect('my_public_diaries')
+    else:
+        form = DiaryForm()
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        context = {'form': form, 'profile': profile_image}
+        return render(request, 'create_new_diary.html', context)
 
 
 @login_required
@@ -84,22 +100,42 @@ def all_public_diaries(request):
 
 
 @login_required
+def my_public_diaries(request):
+    if request.method == "GET":
+        diaries_user = Diary.objects.filter(user_id=request.user.id)
+
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        context = {'profile': profile_image, 'diaries': diaries_user}
+        return render(request, 'my_public_diaries.html', context)
+
+
+@login_required
 def all_records(request, page_number=1):
     if request.method == "GET":
         PageView.objects.get_or_create(url='records')
         entrance_url('records')
         search_query = request.GET.get('s', '')
-        rec_user = Record.objects.filter(Q(user_id=request.user.id) & (Q(header__icontains=search_query) |
-                   Q(text__icontains=search_query))) if search_query else Record.objects.filter(user_id=request.user.id)
+        rec_user = Record.objects.filter(
+            Q(user_id=request.user.id) & (Q(header__icontains=search_query) | Q(text__icontains=search_query))
+        ) if search_query else Record.objects.filter(user_id=request.user.id)
+
         current_page = Paginator(rec_user, 25)
         quantity_records = 0
         for _ in rec_user:
             quantity_records += 1
+
         profile_image = Profile.objects.filter(user_id=request.user.id).first()
-        return render(request, 'all_records.html', {'records': rec_user, 'quantity_records': quantity_records,
-                                                    'keyword_search': search_query, 'profile': profile_image}) if search_query else render(
-                    request, 'all_records.html', {'records': current_page.page(page_number),
-                                                  'quantity_records': quantity_records, 'keyword_search': search_query, 'profile': profile_image})
+        context = {
+            'quantity_records': quantity_records,
+            'keyword_search': search_query,
+            'profile': profile_image
+        }
+        if search_query:
+            context['records'] = rec_user
+        else:
+            context['records'] = current_page.page(page_number)
+
+        return render(request, 'all_records.html', context)
 
 
 @login_required

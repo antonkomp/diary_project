@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Create new diary {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/records/all_records.css' %}" />
+{% endblock %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h3>Create new diary</h3>
+        {{ form|crispy }}
+        <button class="create" id="create_btn" type="submit">Create</button>
+    </form>
+    <hr>
+    <a class="my_public_diaries" href="{% url 'my_public_diaries' %}"> My public diaries </a><br><br>
+{% endblock %}

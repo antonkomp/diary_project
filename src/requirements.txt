@@ -27,7 +27,7 @@ pickleshare==0.7.5
 Pillow==8.0.1
 pipwin==0.5.1
 prompt-toolkit==3.0.8
-psycopg2==2.8.6
+#psycopg2==2.8.6
 pycparser==2.20
 Pygments==2.7.3
 pyjsparser==2.7.1

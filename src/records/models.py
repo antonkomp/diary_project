@@ -5,6 +5,14 @@ from django.dispatch.dispatcher import receiver
 import os
 
 
+class Diary(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=150, null=False)
+
+    def __str__(self):
+        return f'User: {self.user} - Diary: {self.name}'
+
+
 class Record(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateTimeField(auto_now=True)

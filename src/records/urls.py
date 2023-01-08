@@ -1,12 +1,13 @@
 from django.urls import path, re_path
 from .views import add_record, all_records, detail_record, edit_record, \
      delete_record, open_image, send_record, APIRecords, APICreateRecord, APIUpdateRecord, APIDeleteRecord, \
-     delete_voice_record, my_public_diary, all_public_diaries
+     delete_voice_record, my_public_diaries, create_new_diary, all_public_diaries
 
 
 urlpatterns = [
     path('add_entry/', add_record, name='add_record'),
-    path('my_public_diary/', my_public_diary, name='my_public_diary'),
+    path('my_public_diaries/', my_public_diaries, name='my_public_diaries'),
+    path('create_new_diary/', create_new_diary, name='create_new_diary'),
     path('all_public_diaries/', all_public_diaries, name='all_public_diaries'),
     path('all_entries/', all_records, name='all_records'),
     path('details_entry/<int:record_id>/', detail_record, name='detail_record'),
