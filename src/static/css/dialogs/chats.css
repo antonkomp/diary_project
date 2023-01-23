@@ -1,4 +1,4 @@
-/* messages */
+/* chats */
 
 h3 {
 	color:red;
@@ -39,4 +39,34 @@ h3 {
 }
 .search_inp:focus {
   border-color: #7a66b0;
+}
+.layer1 {
+  float: left;
+  width: 250px;
+}
+.layer2 {
+  float: left;
+  width: 1000px;
+}
+hr {
+  clear: left;
+}
+.chat-window {
+  background: white;
+  width: 1000px;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+}
+.mess {
+  background: lightgray;
+  border-radius: 10px;
+  padding: 1px 10px;
+  margin-bottom: 10px;
+}
+.usr-name {
+  font-weight: bold;
+  margin-top: 5px;
+}
+.chat-input {
+  width: 90%;
 }

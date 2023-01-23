@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %} Chat {{ chat.members }} {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/dialogs/chats.css' %}" />
+{% endblock %}
+{% block content %}
+    <form action={% url 'chats' %} method="GET">
+        <h3>My chats</h3>
+
+        <div class="layer1">
+            <table>
+                {% for chat in chats %}
+                <tr>
+                    <td> <a href="">{{ chat }}</a> </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="layer2">
+            <div class="chat-window-main" id="chat-messages">
+                {% for message in messages %}
+                <div class="mess">
+                    <p class="usr-name">{{ message.user.username }}</p>
+                    <p>{{ message.text }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="chat-window">
+                <form method="POST">
+                    <input type="text" name="context" class="chat-input" placeholder="Your message..." id="chat-message-input">
+                    <button class="button" id="chat-message-submit">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </form>
+    <hr>
+{% endblock %}
+{% block scripts %}
+{{ chat.slug|json_script:"json-chatname" }}
+{{ request.user.username|json_script:"json-username" }}
+
+<script>
+    const chatName = JSON.parse(document.getElementById('json-chatname').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+        + chatName
+        + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        console.log('onmessage')
+
+        const data = JSON.parse(e.data);
+
+        if (data.message) {
+            let html = '<div class="mess">';
+                html += '<p class="usr-name">' + data.username + '</p>';
+                html += '<p>' + data.message + '</p></div>';
+
+            document.querySelector('#chat-messages').innerHTML += html;
+
+            scrollToBottom();
+        } else {
+            alert('The message was empty!');
+        }
+    }
+
+    chatSocket.onclose = function(e) {
+        console.log('onclose')
+    }
+
+    //
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        e.preventDefault();
+
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'chat': chatName
+        }));
+
+        messageInputDom.value = '';
+
+        return false;
+    }
+
+    //
+
+    function scrollToBottom() {
+        const objDiv = document.querySelector('#chat-messages');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    scrollToBottom();
+</script>
+{% endblock %}
