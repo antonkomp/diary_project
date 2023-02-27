@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from accounts.models import PageView, Profile
+from django.views import View
+from django.views.generic import DeleteView
+from django.urls import reverse_lazy
 from .models import Message, Chat
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,30 +16,43 @@ def entrance_url(url):
     entrance.update(views=F('views') + 1)
 
 
-@login_required
-def chats(request):
+class ChatsView(View):
     """
     Show user chats.
     """
-    PageView.objects.get_or_create(url='chats')
-    entrance_url('chats')
-    profile_image = Profile.objects.filter(user_id=request.user.id).first()
-    my_chats = Chat.objects.filter(members__in=[request.user.id])
-    return render(request, 'chats.html', {'profile': profile_image, 'chats': my_chats})
+    def get(self, request):
+        PageView.objects.get_or_create(url='chats')
+        entrance_url('chats')
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        my_chats = Chat.objects.filter(members__in=[request.user.id])
+        return render(request, 'chats.html', {
+            'profile': profile_image,
+            'user_profile': request.user,
+            'chats': my_chats
+        })
 
 
-@login_required
-def chat(request, slug):
-    my_chat = Chat.objects.get(slug=slug)
-    my_chats = Chat.objects.filter(members__in=[request.user.id])
-    profile_image = Profile.objects.filter(user_id=request.user.id).first()
-    my_messages = Message.objects.filter(chat=my_chat)[0:25]
-    return render(request, 'chat.html', {
-        'profile': profile_image,
-        'chat': my_chat,
-        'chats': my_chats,
-        'messages': my_messages
-    })
+class ChatView(View):
+    def get(self, request, pk):
+        my_chat = Chat.objects.get(pk=pk)
+        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        my_messages = Message.objects.filter(chat=my_chat)
+        return render(request, 'chat.html', {
+            'profile': profile_image,
+            'chat': my_chat,
+            'messages': my_messages
+        })
+
+
+class MessageDelete(DeleteView):
+    model = Message
+
+    # Не лучшее решение, в будущем лучше работать с формой и JS
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('chat', kwargs={'pk': self.object.chat.pk})
 
 
 @login_required

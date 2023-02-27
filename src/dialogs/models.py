@@ -5,8 +5,7 @@ from django.db.models.signals import pre_delete
 
 
 class Chat(models.Model):
-    members = models.ManyToManyField(User)
-    slug = models.SlugField(unique=True)
+    members = models.ManyToManyField(User, verbose_name='Members')
     last_message = models.ForeignKey(
         'Message',
         related_name="last_message",
@@ -20,17 +19,14 @@ class Message(models.Model):
     """
     Sending message to another user.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now=True)
-    text = models.TextField(max_length=9999)
-    is_readed = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'{self.user} - {str(self.date)[:19]}'
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='User')
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, verbose_name='Chat')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Date')
+    text = models.TextField(max_length=9999, verbose_name='Message')
+    is_readed = models.BooleanField(default=False, verbose_name='Readed')
 
     class Meta:
-        ordering = ('-date',)
+        ordering = ('date',)
 
-
-
+    def __str__(self):
+        return self.text

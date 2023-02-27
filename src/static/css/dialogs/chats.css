@@ -1,8 +1,6 @@
 /* chats */
 
-h3 {
-	color:red;
-	}
+
 .send_message {
 	color: green;
 	}
@@ -42,7 +40,7 @@ h3 {
 }
 .layer1 {
   float: left;
-  width: 250px;
+  width: 100%;
 }
 .layer2 {
   float: left;
@@ -57,7 +55,7 @@ hr {
   border-radius: 10px;
   padding: 20px 20px 20px 20px;
 }
-.mess {
+.message {
   background: lightgray;
   border-radius: 10px;
   padding: 1px 10px;
@@ -69,4 +67,81 @@ hr {
 }
 .chat-input {
   width: 90%;
+}
+.chat_lists {
+  width: 100%;
+  height: 500px;
+  margin-top: 30px;
+  overflow-y: scroll;
+}
+.chat_lists ul {
+  margin: 0;
+  padding: 0;
+}
+.lists {
+  margin-top: 20px;
+}
+.chat_lists ul li .user_info {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 15px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.chat_lists ul li:hover {
+  border-radius: 15px;
+  transition: 0.5s;
+  background: #67b168;
+}
+.chat_lists ul li .user_info .user_avatar {
+  position: relative;
+  margin-right: 10px;
+}
+.chat_lists ul li .user_avatar .user_status {
+  position: absolute;
+  bottom: 0;
+  right: 4px;
+}
+.online_st {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: silver;
+  border: 2px solid #1a1a1a;
+}
+.chat_lists ul li .user_info .user_avatar img {
+  width: 67px;
+  height: 67px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  object-fit: cover;
+}
+.chat_lists .mess {
+  width: 100%;
+  margin-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+.chat_lists .mess .user_fullname {
+  font-size: 20px;
+  font-weight: bold;
+  color: Green;
+
+}
+.chat_lists .mess .u_message {
+  vertical-align: center;
+  color: green;
+}
+.chat_lists .action {
+  position: relative;
+  width: 150px;
+  color: green;
+}
+.chat_lists .mess .user_name {
+  font-size: 18px;
+  color: #93a1a1;
 }
