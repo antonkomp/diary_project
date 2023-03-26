@@ -1,26 +1,26 @@
 from rest_framework import serializers
-from .models import Record
+from .models import Entry
 
 
-class RecordsSerializer(serializers.ModelSerializer):
+class EntrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Record
+        model = Entry
         fields = ('id', 'date', 'header', 'text', 'image')
 
 
-class CreateRecordSerializer(serializers.ModelSerializer):
+class CreateEntrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Record
+        model = Entry
         fields = ('header', 'text', 'image')
 
 
-class UpdateRecordSerializer(serializers.ModelSerializer):
+class UpdateEntrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Record
+        model = Entry
         fields = ('header', 'text', 'image', 'delete_image')
 
 
-class DeleteRecordSerializer(serializers.ModelSerializer):
+class DeleteEntrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Record
+        model = Entry
         fields = ('id', 'date', 'header', 'text', 'image')

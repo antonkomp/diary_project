@@ -2,7 +2,7 @@
 {% block title %} My entries {% endblock %}
 {% load static %}
 {% block static %}
-    <link rel="stylesheet" href="{% static 'css/records/all_records.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/entries/all_entries.css' %}" />
 {% endblock %}
 {% block content %}
     {% for message in messages %}
@@ -12,8 +12,8 @@
     </div>
     {% endfor %}
     <div class="search_entries">
-    <form action="{% url 'all_records' %}" method="GET">
-        <h3>My entries ({{ quantity_records }})</h3>
+    <form action="{% url 'all_entries' %}" method="GET">
+        <h3>My entries ({{ quantity_entries }})</h3>
         <div class="search">
             <input class="search_inp" name="s" placeholder="Search" type="text">
             <button class="search_but" type="submit"></button>
@@ -26,7 +26,7 @@
             <br>
         {% endif %}
     </form>
-    <a class="add_record" href="{% url 'add_record' %}"> Add entry </a>
+    <a class="add_entry" href="{% url 'add_entry' %}"> Add entry </a>
     </div>
     <!-- new table -->
         <div class="content_entries">
@@ -38,35 +38,35 @@
 
             </div>
             <hr class="hr_head">
-        {% for record in records %}
+        {% for entry in entries %}
             <div class="tableBlock__row">
                 <div class="entr_col">
-                    <a href="{% url 'detail_record' record.id %}"><label class="fa fa-calendar-check-o"></label>
-                        {{ record.date }}
+                    <a href="{% url 'detail_entry' entry.id %}"><label class="fa fa-calendar-check-o"></label>
+                        {{ entry.date }}
                     </a>
-                    {% if record.check_edit %}
+                    {% if entry.check_edit %}
                         <span id="icon_edit"><i class="fa fa-edit"></i></span>
                     {% endif %}
                 </div>
                 <div class="entr_col">
-                    <a href="{% url 'detail_record' record.id %}" title="{{ record.text|truncatechars:85 }}"><label class="fa fa-navicon"></label>
-                        {{ record.header|truncatechars:40 }}
+                    <a href="{% url 'detail_entry' entry.id %}" title="{{ entry.text|truncatechars:85 }}"><label class="fa fa-navicon"></label>
+                        {{ entry.header|truncatechars:40 }}
                     </a>
-                    {% if record.image %}
+                    {% if entry.image %}
                         <span id="icon_image"><i class="fa fa-image"></i></span>
                     {% endif %}
-                    {% if record.voice_record %}
+                    {% if entry.voice_record %}
                         <span id="icon_mic"><i class="fa fa-microphone"></i></span>
                     {% endif %}
                 </div>
                 <div class="right_side entr_col" >
-                    <a href="{% url 'detail_record' record.id %}" title="Show">
+                    <a href="{% url 'detail_entry' entry.id %}" title="Show">
                         <button class="btn"><i class="fa fa-eye"></i></button>
                     </a>
-                    <a href="{% url 'edit_record' record.id %}" title="Edit">
+                    <a href="{% url 'edit_entry' entry.id %}" title="Edit">
                         <button class="btn"><i class="fa fa-edit"></i></button>
                     </a>
-                    <form class="peren" action='{% url "delete_record" record.id %}' method="POST" title="Delete">
+                    <form class="peren" action='{% url "delete_entry" entry.id %}' method="POST" title="Delete">
                         {% csrf_token %}
                         <button class="btn"><i class="fa fa-trash"></i></button>
                     </form>
@@ -80,20 +80,20 @@
     <div class="row">
         <div class="large-3 large-offset-5 columns">
             <ul class="pagination">
-                {% if records.has_previous %}
-                    <li class="arrow"><a href="/page/{{ records.previous_page_number }}/">&laquo;</a></li>
+                {% if entries.has_previous %}
+                    <li class="arrow"><a href="/page/{{ entries.previous_page_number }}/">&laquo;</a></li>
                 {% elif not keyword_search %}
                     <li class="arrow unavailable"><a href="">&laquo;</a></li>
                 {% endif %}
-                {% for page in records.paginator.page_range %}
-                    {% if page == records.number %}
+                {% for page in entries.paginator.page_range %}
+                    {% if page == entries.number %}
                         <li class="current"><a href="/page/{{ page }}/">{{ page }}</a></li>
                     {% else %}
                         <li><a href="/page/{{ page }}/">{{ page }}</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if records.has_next %}
-                    <li class="arrow"><a href="/page/{{ records.next_page_number }}/">&raquo;</a></li>
+                {% if entries.has_next %}
+                    <li class="arrow"><a href="/page/{{ entries.next_page_number }}/">&raquo;</a></li>
                 {% elif not keyword_search %}
                     <li class="arrow unavailable"><a href="">&raquo;</a></li>
                 {% endif %}

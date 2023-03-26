@@ -3,23 +3,23 @@
 {% block title %} Edit entry {% endblock %}
 {% load static %}
 {% block static %}
-    <link rel="stylesheet" href="{% static 'css/records/edit_record.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/entries/edit_entry.css' %}" />
     <link rel="stylesheet" href="{% static 'css/voice_record.css' %}" />
-    <script type="text/javascript" src="{% static 'js/recorder.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/entryer.js' %}"></script>
 {% endblock %}
 {% block content %}
     <h3>Edit entry</h3>
-    <form action='{% url "edit_record" record_id=record.id %}' method="POST" enctype="multipart/form-data">
+    <form action='{% url "edit_entry" entry_id=entry.id %}' method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
-        {% if record.image %}
-            <p id="loaded_image">Loaded: {{ record.image }} </p>
+        {% if entry.image %}
+            <p id="loaded_image">Loaded: {{ entry.image }} </p>
         {% endif %}
-        {% if record.voice_record %}
+        {% if entry.voice_record %}
             <div class="voice_record">
                 <audio
                     controls
-                    src="{{ record.voice_record.url }}">
+                    src="{{ entry.voice_record.url }}">
                         Your browser does not support the
                         <code>audio</code> element.
                 </audio>
@@ -30,19 +30,19 @@
         {% endif %}
         <div class="voice_recording" id="id_voice_record" style="display:none">
             <div id="controls">
-             <button id="recordButton" type='button'>Record</button>
+             <button id="entryButton" type='button'>entry</button>
              <button id="pauseButton" disabled type='button'>Pause</button>
              <button id="stopButton" disabled>Stop</button>
             </div>
-            <ol id="recordingsList"></ol>
+            <ol id="entryingsList"></ol>
         </div>
         <button class="save" id="save_btn" type="submit">Save</button>
         <script type="text/javascript" src="{% static 'js/voice_record_edit.js' %}"></script>
     </form>
     <hr>
-    <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br><br>
+    <a class="all_entries" href="{% url 'all_entries' %}"> My entries </a><br><br>
     <script>
-        var id  = {{ record.id }}
+        var id  = {{ entry.id }}
         $(".but_voice_record").click(function(){
             $(".voice_recording").toggle();
         });
@@ -86,7 +86,7 @@
             $(".voice_record").remove();
             $("#id_voice_record").css({"display": "block", "margin-top": "1em"});
             $.ajax({
-                url: "{% url 'delete_voice_record' record_id=record.id %}",
+                url: "{% url 'delete_voice_record' entry_id=entry.id %}",
                 success: function (data) {
                     console.log('response' + JSON.stringify(data));
                 },

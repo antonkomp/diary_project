@@ -6,6 +6,7 @@ import os
 
 
 class Diary(models.Model):
+    objects = None
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=150, null=False)
 
@@ -13,7 +14,8 @@ class Diary(models.Model):
         return f'User: {self.user} - Diary: {self.name}'
 
 
-class Record(models.Model):
+class Entry(models.Model):
+    objects = None
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateTimeField(auto_now=True)
     check_edit = models.BooleanField(default=False)
@@ -39,11 +41,11 @@ class Record(models.Model):
         return os.path.basename(self.voice_record.name)
 
 
-@receiver(pre_delete, sender=Record)
+@receiver(pre_delete, sender=Entry)
 def image_entry_delete(sender, instance, **kwargs):
     instance.image.delete(False)
 
 
-@receiver(pre_delete, sender=Record)
+@receiver(pre_delete, sender=Entry)
 def voice_record_entry_delete(sender, instance, **kwargs):
     instance.voice_record.delete(False)

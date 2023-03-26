@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class RecordsConfig(AppConfig):
+class EntryConfig(AppConfig):
     name = 'records'
