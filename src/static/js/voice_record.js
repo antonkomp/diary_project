@@ -152,14 +152,14 @@ function createDownloadLink(blob) {
         fd.append("delete_image", upload_delete_image);
         $('#save_btn').prop('type', 'button');
         $.ajax({
-            url: '/add_record/',
+            url: '/add_entry/',
             type: 'POST',
             data: fd,
             dataType: "json",
             processData: false,
             contentType: false,
             success: function (data) {
-                window.location.href = "/all_records/";
+                window.location.href = "/all_entries/";
                 console.log('response' + JSON.stringify(data));
             },
             error: function (data) {

@@ -10,6 +10,7 @@ class Profile(models.Model):
     """
     Information about an author.
     """
+    objects = None
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     account_type = models.CharField(max_length=15, default='Standard')
     birthday = models.DateField(blank=True, null=True,
@@ -98,10 +99,9 @@ def image_message_delete(sender, instance, **kwargs):
 
 
 class PageView(models.Model):
+    objects = None
     url = models.CharField(max_length=70, blank=True, null=True, unique=True)
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'{self.url} - {self.views}'
-
-

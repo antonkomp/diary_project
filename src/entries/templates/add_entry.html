@@ -3,7 +3,7 @@
 {% block title %} Add entry {% endblock %}
 {% load static %}
 {% block static %}
-    <link rel="stylesheet" href="{% static 'css/records/add_record.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/entries/add_entry.css' %}" />
     <link rel="stylesheet" href="{% static 'css/voice_record.css' %}" />
     <script type="text/javascript" src="{% static 'js/recorder.js' %}"></script>
 {% endblock %}
@@ -25,7 +25,7 @@
         <script type="text/javascript" src="{% static 'js/voice_record.js' %}"></script>
     </form>
     <hr>
-    <a class="all_records" href="{% url 'all_records' %}"> My entries </a><br><br>
+    <a class="all_entries" href="{% url 'all_entries' %}"> My entries </a><br><br>
     <script>
         $(".but_voice_record").click(function(){
             $(".voice_recording").toggle();

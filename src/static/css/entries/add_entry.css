@@ -1,23 +1,23 @@
-/* edit_record */
+/* body */
 
 h3 {
 	color: red;
 }
-.all_records {
+.all_entries {
 	color: green;
 	}
 #id_header {
     color: black;
-	background: white;
-	border: 1px solid;
+    background: white;
+    border: 1px solid;
     padding: .275rem .55rem;
     border-radius: .25rem;
     width: 100%;
     }
 textarea {
     color: black;
-	background: white;
-	border: 1px solid;
+    background: white;
+    border: 1px solid;
     padding: .275rem .55rem;
     border-radius: .25rem;
 	width: 100%;
@@ -25,6 +25,12 @@ textarea {
 	resize: none;
 	font-family: sans-serif;
 	font-size: 14px;
+}
+#id_image {
+    cursor: pointer;
+}
+.but_voice_record {
+    cursor: pointer;
 }
 .save {
     display: flex;
@@ -50,33 +56,16 @@ textarea:hover {
     -ms-transform: scale(1.01);
     transform: scale(1.01);
     }
-.input_image input:hover {
-    -webkit-transform: scale(1.01);
-    -ms-transform: scale(1.01);
-    transform: scale(1.01);
-    }
 .asteriskField {
     display: none;
-}
-#id_image {
-    cursor: pointer;
 }
 #headerError {
     font-size: 11px;
     color: red;
 }
-#loaded_image {
-    word-wrap: break-word;
-    font-size: 13px;
-    color: gray;
-}
-audio {
-  display: block;
-  width: 100%;
-  max-width: 20em;
-  margin-top: 0.3rem;
-  margin-bottom: 0.4em;
-  margin-left: -1.5em;
+#div_id_delete_image {
+    display:none;
+    margin-top: 0.3em;
 }
 .but_voice_record {
     margin-top: 1em;
@@ -86,6 +75,10 @@ audio {
     margin-left: 0.6em;
     font-size: 15px;
 }
-#div_id_delete_image {
-    margin-top: 0.3em;
+audio {
+  display: block;
+  width: 100%;
+  margin-top: 0.4rem;
+  margin-bottom: 0.6em;
+  margin-left: -1.5em;
 }

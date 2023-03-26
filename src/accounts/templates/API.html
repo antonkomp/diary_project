@@ -52,30 +52,30 @@
                 </ol>
             </li>
         </ol>
-    <li class="without_std_numb"><a href='#records'>Working with diary records</a></li>
+    <li class="without_std_numb"><a href='#entries'>Working with diary entries</a></li>
         <ol class="without_std_numb">
-            <li class="without_std_numb"><a href='#records_get_all_records'>Get all records</a>
+            <li class="without_std_numb"><a href='#entries_get_all_entries'>Get all entries</a>
                 <ol class="without_std_numb">
-                    <li class="without_std_numb"><a href='#records_get_all_records_request'>Request format</a></li>
-                    <li class="without_std_numb"><a href='#records_get_all_records_parameters'>Response</a></li>
+                    <li class="without_std_numb"><a href='#entries_get_all_entries_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#entries_get_all_entries_parameters'>Response</a></li>
                 </ol>
             </li>
-            <li class="without_std_numb"><a href='#records_create_record'>Create record</a>
+            <li class="without_std_numb"><a href='#entries_create_entry'>Create entry</a>
                 <ol class="without_std_numb">
-                    <li class="without_std_numb"><a href='#records_create_record_request'>Request format</a></li>
-                    <li class="without_std_numb"><a href='#records_create_record_parameters'>Response</a></li>
+                    <li class="without_std_numb"><a href='#entries_create_entry_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#entries_create_entry_parameters'>Response</a></li>
                 </ol>
             </li>
-            <li class="without_std_numb"><a href='#records_edit_record'>Edit record</a>
+            <li class="without_std_numb"><a href='#entries_edit_entry'>Edit entry</a>
                 <ol class="without_std_numb">
-                    <li class="without_std_numb"><a href='#records_edit_record_request'>Request format</a></li>
-                    <li class="without_std_numb"><a href='#records_edit_record_parameters'>Response</a></li>
+                    <li class="without_std_numb"><a href='#entries_edit_entry_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#entries_edit_entry_parameters'>Response</a></li>
                 </ol>
             </li>
-            <li class="without_std_numb"><a href='#records_delete_record'>Delete record</a>
+            <li class="without_std_numb"><a href='#entries_delete_entry'>Delete entry</a>
                 <ol class="without_std_numb">
-                    <li class="without_std_numb"><a href='#records_delete_record_request'>Request format</a></li>
-                    <li class="without_std_numb"><a href='#records_delete_record_parameters'>Response</a></li>
+                    <li class="without_std_numb"><a href='#entries_delete_entry_request'>Request format</a></li>
+                    <li class="without_std_numb"><a href='#entries_delete_entry_parameters'>Response</a></li>
                 </ol>
             </li>
         </ol>
@@ -156,61 +156,61 @@
 <p> 2. 'account_type' - тип аккаунта пользователя,</p>
 <p> 3. 'key' - ключ для изменения типа аккаунта.</p>
 <br>
-<h2 id='records' >Working with diary records</h2>
+<h2 id='entries' >Working with diary entries</h2>
 <hr>
-<h3 id='records_get_all_records'>Get all records</h3>
-<h4 id='records_get_all_records_request'>Request format</h4>
+<h3 id='entries_get_all_entries'>Get all entries</h3>
+<h4 id='entries_get_all_entries_request'>Request format</h4>
 <table border="1" cellpadding="5">
     <tr>
-        <th>/api/records/</th>
+        <th>/api/entries/</th>
     </tr>
 </table>
-<h4 id='records_get_all_records_parameters'>Response</h4>
+<h4 id='entries_get_all_entries_parameters'>Response</h4>
 <p> 1. 'id' - идентификатор записи,</p>
 <p> 2. 'date' - дата и время создания записи,</p>
 <p> 3. 'header' - заголовок записи,</p>
 <p> 4. 'text' - текст записи,</p>
 <p> 5. 'image' - прикрепленное изображение к записи.</p>
 
-<h3 id='records_create_record'>Create record</h3>
-<h4 id='records_create_record_request'>Request format</h4>
+<h3 id='entries_create_entry'>Create entry</h3>
+<h4 id='entries_create_entry_request'>Request format</h4>
 <table border="1" cellpadding="5">
     <tr>
-        <th>/api/record/create/</th>
+        <th>/api/entry/create/</th>
     </tr>
 </table>
-<h4 id='records_create_record_parameters'>Response</h4>
+<h4 id='entries_create_entry_parameters'>Response</h4>
 <p> 1. 'header' - заголовок записи,</p>
 <p> 2. 'text' - текст записи,</p>
 <p> 3. 'image' - прикрепленное изображение к записи.</p>
 
-<h3 id='records_edit_record'>Edit record</h3>
-<h4 id='records_edit_record_request'>Request format</h4>
+<h3 id='entries_edit_entry'>Edit entry</h3>
+<h4 id='entries_edit_entry_request'>Request format</h4>
 <table border="1" cellpadding="5">
     <tr>
-        <th>/api/record/update/[pk]/</th>
+        <th>/api/entry/update/[pk]/</th>
     </tr>
 </table>
 <p>
-    Parameter [pk] - number of the record you want to update.
+    Parameter [pk] - number of the entry you want to update.
 </p>
-<h4 id='records_edit_record_parameters'>Response</h4>
+<h4 id='entries_edit_entry_parameters'>Response</h4>
 <p> 1. 'header' - заголовок записи,</p>
 <p> 2. 'text' - текст записи,</p>
 <p> 3. 'image' - прикрепленное изображение к записи,</p>
 <p> 4. 'delete_image' - возможность удалить изображение.</p>
 
-<h3 id='records_delete_record'>Delete record</h3>
-<h4 id='records_delete_record_request'>Request format</h4>
+<h3 id='entries_delete_entry'>Delete entry</h3>
+<h4 id='entries_delete_entry_request'>Request format</h4>
 <table border="1" cellpadding="5">
     <tr>
-        <th>/api/record/delete/[pk]/</th>
+        <th>/api/entry/delete/[pk]/</th>
     </tr>
 </table>
 <p>
-    Parameter [pk] - number of the record you want to delete.
+    Parameter [pk] - number of the entry you want to delete.
 </p>
-<h4 id='records_delete_record_parameters'>Response</h4>
+<h4 id='entries_delete_entry_parameters'>Response</h4>
 <p> 1. 'id' - идентификатор записи,</p>
 <p> 2. 'date' - дата и время создания записи,</p>
 <p> 3. 'header' - заголовок записи,</p>

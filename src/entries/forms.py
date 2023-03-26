@@ -1,10 +1,10 @@
-from .models import Record, Diary
+from .models import Entry, Diary
 from django import forms
 
 
-class RecordForm(forms.ModelForm):
+class EntryForm(forms.ModelForm):
     class Meta:
-        model = Record
+        model = Entry
         fields = ('header', 'text', 'image', 'delete_image',)
 
 

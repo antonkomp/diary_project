@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'rest_framework',
     'django_extensions',
-    'records',
+    'entries',
     'django_registration',
     'social_django',
     'crispy_forms',
@@ -133,7 +133,7 @@ TEMPLATES = [
         'DIRS': [
             'templates',
             'accounts/templates',
-            'records/templates'
+            'entries/templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {

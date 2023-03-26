@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('records', '0003_rename_heading_record_header'),
+        ('entries', '0003_rename_heading_record_header'),
     ]
 
     operations = [

@@ -1,8 +1,8 @@
-/* all_records */
+/* all_entries */
 h3 {
 	color: red;
 }
-.add_record {
+.add_entry {
 	color: green;
 	display: flex;
     justify-content: center;
