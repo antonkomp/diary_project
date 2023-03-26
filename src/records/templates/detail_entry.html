@@ -2,7 +2,7 @@
 {% block title %} Detail entry {% endblock %}
 {% load static %}
 {% block static %}
-    <link rel="stylesheet" href="{% static 'css/records/detail_record.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/entries/detail_entry.css' %}" />
 {% endblock %}
 {% block content %}
     {% for message in messages %}
@@ -11,44 +11,44 @@
             {{ message }}
         </div>
     {% endfor %}
-    {% if record.check_edit %}
+    {% if entry.check_edit %}
         <h3 style="color:red;">Details entry (edited)</h3>
     {% else %}
         <h3 style="color:red;">Details entry</h3>
     {% endif %}
-    <p>Date: {{ record.date }}</p>
-    <p id="header_entry">Header: {{ record.header }}</p>
-    {% if record.text %}
-        <p id="text_entry">Text: {{ record.text }}</p>
+    <p>Date: {{ entry.date }}</p>
+    <p id="header_entry">Header: {{ entry.header }}</p>
+    {% if entry.text %}
+        <p id="text_entry">Text: {{ entry.text }}</p>
     {% endif %}
-    {% if record.image %}
-        <a class="image_url" href="{% url 'open_image' record.id %}" target="_blank">
-            <img class="image" src="{{ record.image.url }}" alt="connect" style="max-height:300px"> </a><br><br>
+    {% if entry.image %}
+        <a class="image_url" href="{% url 'open_image' entry.id %}" target="_blank">
+            <img class="image" src="{{ entry.image.url }}" alt="connect" style="max-height:300px"> </a><br><br>
     {% endif %}
-    {% if record.voice_record %}
+    {% if entry.voice_record %}
         <div class="voice_record">
             <audio
                 controls
-                src="{{ record.voice_record.url }}">
+                src="{{ entry.voice_record.url }}">
                     Your browser does not support the
                     <code>audio</code> element.
             </audio>
         </div><br>
     {% endif %}
 
-    <form action={% url "edit_record" record.id %} method="GET">
+    <form action={% url "edit_entry" entry.id %} method="GET">
         <input class="edit" type="submit" value="Edit"/>
     </form>
     <br>
-    <form action={% url "send_record" record.id %} method="POST">
+    <form action={% url "send_entry" entry.id %} method="POST">
         {% csrf_token %}
         <input class="send" type="submit" value="Send to email"/>
     </form>
     <br>
-    <form action={% url "delete_record" record.id %} method="POST">
+    <form action={% url "delete_entry" entry.id %} method="POST">
         {% csrf_token %}
         <input class="delete" type="submit" value="Delete"/>
     </form>
     <hr>
-    <a class="my_entries" href="{% url 'all_records' %}"> My entries </a><br><br><br>
+    <a class="my_entries" href="{% url 'all_entries' %}"> My entries </a><br><br><br>
 {% endblock %}
