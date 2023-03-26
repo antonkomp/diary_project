@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load get_comp %}
+{% block title %} Chats {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/dialogs/chats.css' %}" />
+{% endblock %}
+{% block content %}
+    <h3 class="test">My chats</h3>
+        {% if chats.count == 0 %}
+            <div>You have no active chats</div>
+        {% endif %}
+
+        <div class="layer1">
+            <div class="chat_lists">
+                <div class="lists">
+                    <ul>
+                        {% for chat in chats %}
+                            {% get_companion user chat as companion %}
+                            <li>
+                                <a href="{% url 'chat' chat.pk %}">
+                                    <div class="user_info">
+                                        <div class="user_avatar">
+                                            {% if companion.profile.image %}
+                                                <img src="{{ companion.profile.image.url }}" alt="user_image" title="{{ companion.username }}">
+                                            {% elif backends.associated %}
+                                                {% for ass in backends.associated %}
+                                                    {% if ass.provider == 'google-oauth2' %}
+                                                        <div class="social_image">
+                                                            <img src="{{ass.extra_data.picture}}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ companion.username }}">
+                                                        </div>
+                                                    {% elif ass.provider == 'facebook' %}
+                                                        <div class="social_image">
+                                                            <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="28" height="28" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="{{ companion.username }}">
+                                                        </div>
+                                                    {% else %}
+                                                        <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="28" height="28" style="border-radius: 50%" title="{{ companion.username }}">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="38" height="38" style="border-radius: 50%" title="{{ companion.username }}">
+                                            {% endif %}
+                                            <div class="user_status">
+                                                <div class="online_st"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mess">
+                                            <span class="user_fullname">{{ companion.first_name }} {{ companion.last_name }}</span>
+                                            <span class="{% if companion.first_name or companion.last_name %}user_name{% else %}user_fullname{% endif %}">@{{ companion.username }}</span>
+                                            <br>
+                                            {% if chat.last_message %}
+                                                {% if chat.last_message.user.profile.image %}
+                                                    <img src="{{ chat.last_message.user.profile.image.url }}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">
+                                                {% elif backends.associated %}
+                                                    {% for ass in backends.associated %}
+                                                        {% if ass.provider == 'google-oauth2' %}
+                                                            <div class="social_image">
+                                                                <img src="{{ass.extra_data.picture}}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">
+                                                            </div>
+                                                        {% elif ass.provider == 'facebook' %}
+                                                            <div class="social_image">
+                                                                <img src="{{ass.extra_data.picture.data.url}}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">
+                                                            </div>
+                                                        {% else %}
+                                                            <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="38" height="38" style="border-radius: 50%" title="">
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="38" height="38" style="border-radius: 50%" title="">
+                                                {% endif %}
+                                            {% endif %}
+                                            <span class="u_message">{% if chat.last_message %}{{ chat.last_message }}{% endif %}</span>
+                                        </div>
+                                        <div class="action">
+                                            <span class="data">{{ chat.last_message.date }}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <hr>
+{% endblock %}

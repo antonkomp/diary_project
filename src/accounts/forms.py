@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Account, Messages
+from .models import Profile, Account
 
 
 class RegistrForm(UserCreationForm):
@@ -39,12 +39,3 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('first_name', 'last_name', 'email', 'birthday', 'location', 'website', 'bio', 'image')
-
-
-class MessagesForm(forms.ModelForm):
-    """
-    Form for sending messages to other users.
-    """
-    class Meta:
-        model = Messages
-        fields = ('recipient', 'sender', 'header', 'text', 'image', 'delete_image')

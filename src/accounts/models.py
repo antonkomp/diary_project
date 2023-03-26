@@ -73,31 +73,6 @@ class ConfirmationKey(models.Model):
     key = models.CharField(max_length=32, default=uuid)
 
 
-class Messages(models.Model):
-    """
-    Sending message to another user.
-    """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    date = models.DateTimeField(auto_now=True)
-    recipient = models.CharField(max_length=150)
-    sender = models.CharField(max_length=150, null=True, blank=True)
-    header = models.CharField(max_length=70, null=True, blank=True)
-    text = models.TextField(max_length=9999)
-    image = models.ImageField(upload_to='image_messages/', blank=True, null=True)
-    delete_image = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'{self.user} > ({self.recipient}) - {str(self.date)[:19]} {str(self.image)[-19:]}'
-
-    class Meta:
-        ordering = ('-date',)
-
-
-@receiver(pre_delete, sender=Messages)
-def image_message_delete(sender, instance, **kwargs):
-    instance.image.delete(False)
-
-
 class PageView(models.Model):
     objects = None
     url = models.CharField(max_length=70, blank=True, null=True, unique=True)

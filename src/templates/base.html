@@ -44,6 +44,10 @@
             margin:0;
             padding:0;
         }
+        .chat_window_main {
+            height: 400px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -102,9 +106,9 @@
                 </a>
             </li>
             <li class="hat_li">
-                <a style="color: #e0e0e0;" href="{% url 'my_messages' %}">
+                <a style="color: #e0e0e0;" href="{% url 'chats' %}">
                     <label class="icon_messages"></label>
-                    Messages
+                    Chats
                 </a>
             </li>
         </ol>
@@ -194,3 +198,5 @@
     </footer>
 </div>
 </body>
+{% block scripts %}
+{% endblock %}

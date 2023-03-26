@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistrForm, ProfileForm, AccountKeyForm, MessagesForm
+from .forms import RegistrForm, ProfileForm, AccountKeyForm
 from django.template import loader
 from django.core.mail import send_mail
 from django.urls import reverse
-from .models import ConfirmationKey, Profile, Account, Messages, PageView
+from .models import ConfirmationKey, Profile, Account, PageView
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout as logout_user
@@ -210,89 +210,6 @@ def account(request):
         acc.save()
         prof.save()
         return redirect('account')
-
-
-@login_required
-def message(request):
-    """
-    Show user messages.
-    """
-    PageView.objects.get_or_create(url='message')
-    entrance_url('message')
-    search_query = request.GET.get('s', '')
-    profile_image = Profile.objects.filter(user_id=request.user.id).first()
-    if search_query:
-        mess = Messages.objects.filter(Q(recipient=request.user) & (Q(header__icontains=search_query) |
-                                                                    Q(text__icontains=search_query) |
-                                                                    Q(sender__icontains=search_query)))
-    else:
-        mess = Messages.objects.filter(recipient=request.user)
-    return render(request, 'messages.html', {'form_mess': mess, 'keyword_search': search_query, 'profile': profile_image})
-
-
-@login_required
-def message_details(request, messages_id):
-    if request.method == "GET":
-        mess = Messages.objects.filter(id=messages_id).first()
-        if mess.recipient != str(request.user):
-            context = {'form': AuthenticationForm()}
-            return render(request, 'login.html', context)
-        profile_image = Profile.objects.filter(user_id=request.user.id).first()
-        context = {'message': mess, 'profile': profile_image}
-        return render(request, 'detail_message.html', context)
-
-
-@login_required
-def send_message(request):
-    """
-    Send message
-    """
-    if request.method == 'POST':
-        form = MessagesForm(request.POST, request.FILES)
-        if form.is_valid():
-            mess_form = form.save(commit=False)
-            mess_form.user = request.user
-            mess_form.sender = request.user
-            if str(mess_form.image) != '' and mess_form.delete_image:
-                mess_form.image = ''
-            checking = User.objects.filter(username=mess_form.recipient).first()
-            if checking is None:
-                messages.error(request, 'This user does not exist!')
-                form = MessagesForm(initial={
-                    'header': mess_form.header,
-                    'text': mess_form.text,
-                })
-                return render(request, 'send_message.html', {'form': form})
-            mess_form.save()
-            messages.success(request, 'New message sent!')
-            return redirect('my_messages')
-    else:
-        form = MessagesForm()
-        profile_image = Profile.objects.filter(user_id=request.user.id).first()
-    return render(request, 'send_message.html', {'form': form, 'profile': profile_image})
-
-
-@login_required
-def open_image_message(request, message_id):
-    mess = Messages.objects.filter(id=message_id).first()
-    if mess.recipient != str(request.user):
-        context = {'form': AuthenticationForm()}
-        return render(request, 'login.html', context)
-    context = {'message': mess}
-    return render(request, 'open_image_message.html', context)
-
-
-@login_required
-def delete_message(request, message_id):
-    mess = Messages.objects.filter(id=message_id).first()
-    if mess.recipient != str(request.user):
-        context = {'form': AuthenticationForm()}
-        return render(request, 'login.html', context)
-    if request.method == 'POST':
-        mess = Messages.objects.filter(id=message_id).first()
-        mess.delete()
-        messages.success(request, 'Message deleted.')
-        return redirect('my_messages')
 
 
 @login_required

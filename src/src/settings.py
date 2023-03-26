@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'django_registration',
     'social_django',
     'crispy_forms',
+    'dialogs',
+    'channels',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
@@ -150,6 +153,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'src.wsgi.application'
+ASGI_APPLICATION = 'src.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 
 # Database

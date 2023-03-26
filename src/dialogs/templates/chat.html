@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load get_comp %}
+{% block title %} Chat {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/dialogs/chat.css' %}" />
+{% endblock %}
+{% block content %}
+        {% if user in chat.members.all %}
+            {% get_companion user chat as companion %}
+            <h3>My chat with {{ companion.first_name }} {{ companion.last_name }}</h3>
+            <div class="chat">
+                <div class="chat_window_main" id="chat-messages">
+                    {% for message in messages %}
+                    <div class="{% if message.user == companion %}message_info_companion{% else %}message_info{% endif %}">
+                        <div class="action">
+                            <div>
+                            {% if message.user.profile.image %}
+                                <img class="avatar_message" src="{{ message.user.profile.image.url }}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">
+                            {% else %}
+                                <img class="image_default" src="{% static 'image/anonymous.jpg' %}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">
+                            {% endif %}
+                            <span class="usr_fullname">{{ message.user.first_name }} {{ message.user.last_name }}</span>
+                            <span class="usr_name">@{{ message.user.username }}</span>
+                            </div>
+                            {% if  message.user == user %}
+                                <a href="{% url 'delete_message' message.pk %}"><button class="delete_mes" id="del_button">&#10008;</button></a>
+                            {% endif %}
+                        </div>
+                        <p class="message" id="message_text">{{ message.text }}</p>
+                        <p class="date" id="message_date">{{ message.date }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="message_input">
+                <form method="POST" id="form_message">
+                    <label for="chat-message-input"></label>
+                    <textarea class="input" name="context" placeholder="Your message..." id="chat-message-input"  rows="2" cols="45" wrap="hard"></textarea>
+                    <button class="button" id="chat-message-submit">Send</button>
+                </form>
+                </div>
+            </div>
+        {% endif %}
+    <hr>
+{% endblock %}
+{% block scripts %}
+{{ chat.pk|json_script:"json-chatname" }}
+{{ request.user.username|json_script:"json-username" }}
+
+<script>
+    const chatName = JSON.parse(document.getElementById('json-chatname').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+        + chatName
+        + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        console.log('onmessage')
+
+        const data = JSON.parse(e.data);
+        const today = new Date();
+        const date = today.toLocaleString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true});
+
+
+        if (data.message) {
+            if (data.username == userName) {
+                let html = '<div class="message_info">';
+                html += `<div class="action"><div><img class="avatar_message" src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'image/anonymous.jpg' %}{% endif %}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">`;
+                html += '<span class="usr_fullname">' + ' ' + '{{user.first_name}} {{user.last_name}}'+ '</span><span class="usr_name">@' + data.username + `</span></div><a href=""><button class="delete_mes" id="del_button">&#10008;</button></a></div>`;
+                html += '<p class="message" id="message_text">' + data.message + '{{ data.pk }}' + '</p>';
+                html += '<p class="date" id="message_date">' + date + '</p></div>';
+
+                document.querySelector('#chat-messages').innerHTML += html;
+            } else {
+                let html = '<div class="message_info_companion">';
+                html += `<div class="action"><div><img class="avatar_message" src="{% get_companion user chat as companion %}{% if companion.profile.image %}{{ companion.profile.image.url }}{% else %}{% static 'image/anonymous.jpg' %}{% endif %}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">`;
+                html += '<span class="usr_fullname">' + ' ' + '{% get_companion user chat as companion %}{{companion.first_name}}{{companion.last_name}}' + '</span><span class="usr_name">@' + data.username + '</span></div></div>';
+                html += '<p class="message">' + data.message + '</p>';
+                html += '<p class="date">' + date + '</p></div>';
+
+                document.querySelector('#chat-messages').innerHTML += html;
+            }
+
+            scrollToBottom();
+        } else {
+            alert('The message was empty!');
+        }
+        location.reload()
+    }
+
+    chatSocket.onclose = function(e) {
+        console.log('onclose')
+    }
+
+    //
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        e.preventDefault();
+
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'chat': chatName,
+        }));
+
+        messageInputDom.value = '';
+
+        return false;
+    }
+
+    //
+
+    function scrollToBottom() {
+        const objDiv = document.querySelector('#chat-messages');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    scrollToBottom();
+</script>
+{% endblock %}

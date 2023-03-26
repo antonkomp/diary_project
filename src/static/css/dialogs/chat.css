@@ -1,0 +1,135 @@
+/* chat */
+
+.chat {
+    margin-left: 150px;
+}
+.chat_window_main {
+    background: gainsboro;
+    border-radius: 15px;
+    width: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+
+}
+.message_input {
+    margin-top: 10px;
+    margin-right: 0;
+    margin-left: 270px;
+}
+.input {
+    font-size: inherit;
+    font-style: inherit;
+    color: inherit;
+    background: gainsboro;
+    border-radius: 10px;
+    padding-left: 10px;
+}
+
+.button {
+    width: 120px;
+    height: 50px;
+    vertical-align: top;
+    color: inherit;
+    font-size: inherit;
+    font-style: inherit;
+}
+.message_info_companion {
+    width: 700px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 7px;
+    margin: 5px;
+}
+.message_info {
+    width: 700px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+    padding: 7px;
+    margin: 5px;
+}
+.message_info .action {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.message_info_companion .action {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.message_info .action .usr_fullname {
+    margin-top: 0;
+    margin-left: 5px;
+    vertical-align: top;
+}
+.message_info .action .usr_name {
+    margin-top: 0;
+    margin-left: 5px;
+    vertical-align: top;
+    font-size: 18px;
+    color: #93a1a1;
+}
+.message_info .message {
+    word-wrap: break-word;
+    margin-top: 0;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+.message_info .date {
+    align-self: flex-end;
+    margin: 0;
+    font-size: 15px;
+}
+.message_info_companion .action .usr_fullname {
+    margin-top: 0;
+    margin-left: 5px;
+    vertical-align: top;
+}
+.message_info_companion .action .usr_name {
+    margin-top: 0;
+    margin-left: 5px;
+    vertical-align: top;
+    font-size: 18px;
+    color: #93a1a1;
+}
+.message_info_companion .message {
+    word-wrap: break-word;
+    margin-top: 0;
+    margin-left: 40px;
+    margin-right: 40px;
+
+}
+.message_info_companion .date {
+    align-self: flex-end;
+    margin: 0;
+    font-size: 15px;
+}
+
+.message_info .action .delete_mes {
+    color: white;
+    border: none;
+    background-color: white;
+}
+.message_info .action .delete_mes:hover {
+    color: red;
+}
+.message_info_companion .action .delete_mes {
+    color: white;
+    border: none;
+    background-color: white;
+}
+.message_info_companion .action .delete_mes:hover {
+    color: red;
+}
+.message_info_companion .action .delete_mes {
+
+}
