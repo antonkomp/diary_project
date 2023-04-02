@@ -15,6 +15,7 @@ class Diary(models.Model):
 
 
 class Entry(models.Model):
+    DoesNotExist = None
     objects = None
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateTimeField(auto_now=True)

@@ -1,4 +1,3 @@
-
 #controls {
   display: flex;
   max-width: 22em;
@@ -9,8 +8,8 @@
   flex-grow: 1;
   border: none;
   background: #ed341d;
-  margin-left: 4px;
-  box-shadow: inset 0 -0.15rem 0 rgba(0, 0, 0, 0.2);
+  margin: 0 4px 0 -5px;
+  box-shadow: inset 0 -.15rem rgba(0,0,0,.2);
   cursor: pointer;
   justify-content: center;
   align-items: center;
@@ -21,8 +20,6 @@
 #controls button:hover, button:focus {
   outline: none;
   background: #c72d1c;
-  -webkit-transform: scale(1.04);
-  -ms-transform: scale(1.04);
   transform: scale(1.04);
 }
 
@@ -38,42 +35,42 @@
   pointer-events: none;
   background: lightgray;
 }
+
 #controls button:first-child {
   margin-left: 0;
 }
-s
+
 li {
   list-style: none;
   margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 }
-#recordingsList{
-	max-width: 20em;
+
+#recordingsList {
+  max-width: 20em;
 }
-li {
-    list-style-type: none; /* Убираем маркеры */
-}
+
 ul {
-    margin-left: 0;
-    padding-left: 0;
+  margin-left: 0;
+  padding-left: 0;
 }
+
 audio::-webkit-media-controls-play-button,
-     audio::-webkit-media-controls-panel {
-     background-color: #dadada;
-     }
+audio::-webkit-media-controls-panel {
+  background-color: #dadada;
+}
+
 #del_voice_record, #del_exist_voice {
-    margin-bottom: 0.5em;
-    margin-left: 3px;
-    margin-right: -5px;
-    background: #d32525;
-    color: #fafafa;
+  margin-bottom: 0.5em;
+  margin-left: 3px;
+  background: #d32525;
+  color: #fafafa;
 }
-#recordingsList li, .voice_record {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-}
+
 .voice_record {
-    margin-top: 1em;
-    margin-left: 2em;
-    margin-bottom: 1em;
+  margin-top: 1em;
+  margin-left: 2em;
+  margin-bottom: 1em;
 }

@@ -51,6 +51,7 @@ def create_profile(instance, created, **kwargs):
 
 
 class Account(models.Model):
+    objects = None
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     account_type = models.CharField(max_length=15, default='Standard')
     key = models.CharField(max_length=20, blank=True, null=True)

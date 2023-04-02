@@ -12,7 +12,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .serializers import UserSerializer, UserEditSerializer, ProfileSerializer, ProfileEditSerializer, AccountSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
-from django.db.models import F, Q
+from django.db.models import F
 from PIL import Image
 import io
 from django.core.files.base import ContentFile

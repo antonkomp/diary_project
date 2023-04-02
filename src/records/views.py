@@ -5,25 +5,28 @@ from accounts.models import PageView, Profile
 from django.forms import model_to_dict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.template import loader
-from django.contrib.auth.models import User
-from django.core.mail import EmailMultiAlternatives
-from email.mime.image import MIMEImage
-from email.mime.audio import MIMEAudio
-import smtplib
+from django.urls import reverse
+from django.core.mail import EmailMessage
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 from .serializers import EntrySerializer, CreateEntrySerializer, UpdateEntrySerializer, DeleteEntrySerializer
 from rest_framework import generics
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import F, Q
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import io
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 import json
 
 
 MAX_SIZE = 1024
+
+SUCCESS_MESSAGE = 'New entry added!'
+SUCCESS_VOICE_MESSAGE = 'New entry with voice record added!'
 
 
 def entrance_url(url):
@@ -32,12 +35,19 @@ def entrance_url(url):
 
 
 def resize_image(us):
-    if us.image.width > MAX_SIZE or us.image.height > MAX_SIZE:
+    if us.image.width <= MAX_SIZE and us.image.height <= MAX_SIZE:
+        return
+
+    try:
         with Image.open(us.image) as img:
             img.thumbnail((MAX_SIZE, MAX_SIZE), Image.ANTIALIAS)
             thumb_io = io.BytesIO()
-            img.save(thumb_io, img.format, quality=86)
-            us.image.save(us.image.name, ContentFile(thumb_io.getvalue()), save=False)
+            img.save(thumb_io, format=img.format, quality=86)
+
+            if img.size != us.image.size:
+                us.image.save(us.image.name, ContentFile(thumb_io.getvalue()), save=False)
+    except UnidentifiedImageError:
+        pass
 
 
 @login_required
@@ -75,6 +85,10 @@ def add_entry(request):
         return render(request, 'add_entry.html', {'form': form, 'profile': profile_image})
 
 
+def handle_ajax_request():
+    return JsonResponse({'success': True})
+
+
 @login_required
 def create_new_diary(request):
     """Create new diary"""
@@ -88,7 +102,7 @@ def create_new_diary(request):
             return redirect('my_public_diaries')
     else:
         form = DiaryForm()
-        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        profile_image = get_object_or_404(Profile, user_id=request.user.id)
         context = {'form': form, 'profile': profile_image}
         return render(request, 'create_new_diary.html', context)
 
@@ -102,9 +116,9 @@ def all_public_diaries(request):
 @login_required
 def my_public_diaries(request):
     if request.method == "GET":
-        diaries_user = Diary.objects.filter(user_id=request.user.id)
+        profile_image = get_object_or_404(Profile, user_id=request.user.id)
+        diaries_user = Diary.objects.filter(user_id=request.user.id).select_related('user')
 
-        profile_image = Profile.objects.filter(user_id=request.user.id).first()
         context = {'profile': profile_image, 'diaries': diaries_user}
         return render(request, 'my_public_diaries.html', context)
 
@@ -117,14 +131,12 @@ def all_entries(request, page_number=1):
         search_query = request.GET.get('s', '')
         rec_user = Entry.objects.filter(
             Q(user_id=request.user.id) & (Q(header__icontains=search_query) | Q(text__icontains=search_query))
-        ) if search_query else Entry.objects.filter(user_id=request.user.id)
+        )
+        quantity_entries = rec_user.count()
 
         current_page = Paginator(rec_user, 25)
-        quantity_entries = 0
-        for _ in rec_user:
-            quantity_entries += 1
 
-        profile_image = Profile.objects.filter(user_id=request.user.id).first()
+        profile_image = get_object_or_404(Profile, user_id=request.user.id)
         context = {
             'quantity_entries': quantity_entries,
             'keyword_search': search_query,
@@ -140,29 +152,24 @@ def all_entries(request, page_number=1):
 
 @login_required
 def detail_entry(request, entry_id):
-    if request.method == "GET":
-        entry = Entry.objects.filter(id=entry_id).first()
-        if entry is None:
-            messages.error(request, f'Entry {entry_id} does not exist!')
-            return redirect('all_entries')
-        if entry.user_id != request.user.id:
-            context = {'form': AuthenticationForm()}
-            return render(request, 'login.html', context)
-        profile_image = Profile.objects.filter(user_id=request.user.id).first()
-        context = {'entry': entry, 'profile': profile_image}
-        return render(request, 'detail_entry.html', context)
+    try:
+        entry = Entry.objects.get(id=entry_id, user=request.user)
+    except Entry.DoesNotExist:
+        messages.error(request, f'Entry {entry_id} does not exist!')
+        return redirect('all_entries')
+
+    context = {'entry': entry, 'profile': Profile.objects.filter(user=request.user).first()}
+    return render(request, 'detail_entry.html', context)
 
 
 @login_required
 def edit_entry(request, entry_id):
+    entry = get_object_or_404(Entry, id=entry_id)
     if request.method == "GET":
-        entry = Entry.objects.filter(id=entry_id).first()
-        if entry is None:
-            messages.error(request, f'Entry {entry_id} does not exist!')
-            return redirect('all_entries')
         if entry.user_id != request.user.id:
             context = {'form': AuthenticationForm()}
             return render(request, 'login.html', context)
+
         entry.delete_image = False
         profile_image = Profile.objects.filter(user_id=request.user.id).first()
         context = {'form': EntryForm(model_to_dict(entry)), 'entry': entry, 'profile': profile_image}
@@ -170,47 +177,51 @@ def edit_entry(request, entry_id):
     elif request.method == "POST":
         form = EntryForm(request.POST, request.FILES)
         if form.is_valid():
-            data = form.cleaned_data
-            entry = Entry.objects.get(id=entry_id)
             if request.is_ajax():
                 entry.header = request.POST.get('header')
                 entry.text = request.POST.get('text')
                 entry.voice_record = request.FILES.get('audio_data')
                 entry.image = request.FILES.get('image')
-                entry.delete_image = json.loads(request.POST.get('delete_image').lower())
+                entry.delete_image = json.loads(request.POST.get('delete_image', 'false').lower())
             else:
+                data = form.cleaned_data
                 entry.header = data['header']
                 entry.text = data['text']
-                if data['image'] is not None:
-                    entry.image.delete()
-                    entry.image = data['image']
-                entry.delete_image = data['delete_image']
+                entry.image = request.FILES.get('image', entry.image)
+                entry.delete_image = data.get('delete_image', False)
                 if entry.delete_image:
                     entry.image.delete()
+
             entry.check_edit = True
             entry.save()
             messages.success(request, 'The entry details updated.')
+            success = True
             if request.is_ajax():
-                return JsonResponse({'success': True, })
+                return JsonResponse({'success': success})
+
             return redirect('detail_entry', entry_id)
-        return JsonResponse({'success': False, })
+
+        success = False
+        if request.is_ajax():
+            return JsonResponse({'success': success})
+
+        return render(request, 'edit_entry.html', {'form': form, 'entry': entry})
 
 
 def delete_voice_record(entry_id):
     """Delete voice record"""
-    entry = Entry.objects.get(id=entry_id)
+    entry = get_object_or_404(Entry, id=entry_id)
     entry.voice_record.delete()
-    return JsonResponse({'success': True, })
+    return {'success': True}
 
 
 @login_required
 def delete_entry(request, entry_id):
-    entry = Entry.objects.filter(id=entry_id).first()
-    if entry.user_id != request.user.id:
+    entry = Entry.objects.filter(id=entry_id, user_id=request.user.id).first()
+    if not entry:
         context = {'form': AuthenticationForm()}
         return render(request, 'login.html', context)
     if request.method == 'POST':
-        entry = Entry.objects.filter(id=entry_id).first()
         entry.delete()
         messages.success(request, 'The entry deleted.')
         return redirect('all_entries')
@@ -218,44 +229,34 @@ def delete_entry(request, entry_id):
 
 @login_required
 def open_image(request, entry_id):
-    entry = Entry.objects.filter(id=entry_id).first()
-    if entry.user_id != request.user.id:
-        context = {'form': AuthenticationForm()}
-        return render(request, 'login.html', context)
-    context = {'entry': entry}
-    return render(request, 'open_image.html', context)
+    entry = Entry.objects.filter(id=entry_id, user=request.user).first()
+    if not entry:
+        return render(request, 'login.html', {'form': AuthenticationForm()})
+    return render(request, 'open_image.html', {'entry': entry})
 
 
 @login_required
+@require_http_methods(["POST"])
 def send_entry(request, entry_id):
-    entry = Entry.objects.filter(id=entry_id).first()
-    if entry.user_id != request.user.id:
-        context = {'form': AuthenticationForm()}
-        return render(request, 'login.html', context)
-    if request.method == 'POST':
-        try:
-            entry = Entry.objects.filter(id=entry_id).first()
-            user = User.objects.filter(id=request.user.id).first()
+    entry = get_object_or_404(Entry, id=entry_id, user=request.user)
+    user = request.user
 
-            subject, from_email, to = 'Sending your entry from Diary', 'antonkomp1@gmail.com', user.email
-            html_content = loader.render_to_string('email/send_entry.html', {'user': user, 'form': entry}).strip()
-            msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
-            msg.content_subtype = 'html'
-            msg.mixed_subtype = 'related'
-            if entry.image:
-                image = MIMEImage(entry.image.read())
-                image.add_header('Content-ID', '<{}>'.format(entry.image_filename))
-                msg.attach(image)
-            if entry.voice_record:
-                voice = MIMEAudio(entry.voice_record.read())
-                voice.add_header('Content-Disposition', 'attachment', filename=entry.voice_filename)
-                msg.attach(voice)
-            msg.send()
-            messages.success(request, 'The entry was successfully sent to email!')
-        except smtplib.SMTPAuthenticationError:
-            messages.error(request, 'Server side error! The entry was not sent. '
-                                    'Please inform the administrator about it.')
-        return redirect('detail_entry', entry_id)
+    subject = 'Sending your entry from Diary'
+    from_email = 'antonkomp1@gmail.com'
+    to = user.email
+
+    html_content = render_to_string('email/send_entry.html', {'user': user, 'form': entry})
+
+    email = EmailMessage(subject, html_content, from_email, [to])
+    if entry.image:
+        email.attach_file(entry.image.path)
+    if entry.voice_record:
+        email.attach_file(entry.voice_record.path)
+
+    email.send(fail_silently=False)
+
+    messages.success(request, 'The entry was successfully sent to email!')
+    return HttpResponseRedirect(reverse('detail_entry', args=[entry_id]))
 
 
 class APIEntries(generics.ListAPIView):
