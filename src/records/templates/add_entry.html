@@ -1,63 +1,64 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}Add entry{% endblock %}
+{% block title %} Add entry {% endblock %}
 {% load static %}
 {% block static %}
-<link rel="stylesheet" href="{% static 'css/entries/add_entry.css' %}"/>
-<link rel="stylesheet" href="{% static 'css/voice_record.css' %}"/>
-<script type="text/javascript" src="{% static 'js/recorder.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/entries/add_entry.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/voice_record.css' %}" />
+    <script type="text/javascript" src="{% static 'js/recorder.js' %}"></script>
 {% endblock %}
 {% block content %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <h3>Add entry</h3>
-    {{ form|crispy }}
-    <input type="button" class="but_voice_record" value="Voice record">
-    <div class="voice_recording" id="id_voice_record" style="display:none">
-        <div id="controls">
-            <button id="recordButton" type='button'>Record</button>
-            <button id="pauseButton" disabled type='button'>Pause</button>
-            <button id="stopButton" disabled>Stop</button>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h3>Add entry</h3>
+        {{ form|crispy }}
+        <input type="button" class="but_voice_record" value="Voice record">
+        <div class="voice_recording" id="id_voice_record" style="display:none">
+            <div id="controls">
+             <button id="recordButton" type='button'>Record</button>
+             <button id="pauseButton" disabled type='button'>Pause</button>
+             <button id="stopButton" disabled>Stop</button>
+            </div>
+            <ol id="recordingsList"></ol>
         </div>
-        <ol id="recordingsList"></ol>
-    </div>
-    <button class="save" id="save_btn" type="submit">Save</button>
-    <script type="text/javascript" src="{% static 'js/voice_record.js' %}"></script>
-</form>
-<hr>
-<a class="all_entries" href="{% url 'all_entries' %}">My entries</a><br><br>
-<script>
-$(".but_voice_record").click(function(){
-<!--$(".voice_recording").toggle();.-->
-});
+        <button class="save" id="save_btn" type="submit">Save</button>
+        <script type="text/javascript" src="{% static 'js/voice_record.js' %}"></script>
+    </form>
+    <hr>
+    <a class="all_entries" href="{% url 'all_entries' %}"> My entries </a><br><br>
+    <script>
+        $(".but_voice_record").click(function(){
+            $(".voice_recording").toggle();
+        });
         $("input[type=checkbox]").keydown(function(event){
-        if(event.keyCode == 13){
-            event.preventDefault();
-            return false;
+            if(event.keyCode == 13){
+              event.preventDefault();
+                return false;
+            }
+        });
+        $('#id_header').keyup(function () {
+            var header_value = document.getElementById('id_header').value;
+            if (/^ *$/.test(header_value)) {
+                $('#headerError').remove();
+                $('#id_header').removeClass('is-valid').addClass('is-invalid');
+                $('#id_header').after('<div class="invalid-feedback" id="headerError">The header is empty!</div>')
+                $('#id_header').css({"border-color": "red", "background": "#FDF5F5"});
+                $('#save_btn').attr("disabled", true);
+                $('#save_btn').css({"background": "#9c9c9c"});
+            }
+            else {
+                $('#id_header').removeClass('is-invalid').addClass('is-valid');
+                $('#headerError').remove();
+                $('#id_header').css({"border-color": "black", "background": "#eceff3"});
+                $('#save_btn').removeAttr("disabled");
+                $('#save_btn').css({"background": "#1a73e8"});
+            }
+        });
+        $(".clearablefileinput").click(function(){
+            setTimeout(loadAfterTime, 1500);
+        });
+        function loadAfterTime() {
+            $("#div_id_delete_image").show()
         }
-    });
-
-    $('#id_header').on('input', function () {
-        var header_value = this.value.trim();
-        if (header_value === '') {
-            $('#headerError').remove();
-            $('#id_header').removeClass('is-valid').addClass('is-invalid').css({"border-color": "red", "background": "#FDF5F5"});
-            $('#id_header').after('<div class="invalid-feedback" id="headerError">The header is empty!</div>');
-            $('#save_btn').attr("disabled", true).css({"background": "#9c9c9c"});
-        } else {
-            $('#id_header').removeClass('is-invalid').addClass('is-valid').css({"border-color": "black", "background": "#eceff3"});
-            $('#headerError').remove();
-            $('#save_btn').removeAttr("disabled").css({"background": "#1a73e8"});
-        }
-    });
-
-    $(".clearablefileinput").click(function(){
-        setTimeout(loadAfterTime, 1500);
-    });
-
-    function loadAfterTime() {
-        $("#div_id_delete_image").show();
-    }
-
-</script>
+    </script>
 {% endblock %}
