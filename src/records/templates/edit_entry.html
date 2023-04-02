@@ -5,7 +5,7 @@
 {% block static %}
     <link rel="stylesheet" href="{% static 'css/entries/edit_entry.css' %}" />
     <link rel="stylesheet" href="{% static 'css/voice_record.css' %}" />
-    <script type="text/javascript" src="{% static 'js/entryer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/recorder.js' %}"></script>
 {% endblock %}
 {% block content %}
     <h3>Edit entry</h3>
@@ -30,11 +30,11 @@
         {% endif %}
         <div class="voice_recording" id="id_voice_record" style="display:none">
             <div id="controls">
-             <button id="entryButton" type='button'>entry</button>
+             <button id="recordButton" type='button'>Record</button>
              <button id="pauseButton" disabled type='button'>Pause</button>
              <button id="stopButton" disabled>Stop</button>
             </div>
-            <ol id="entryingsList"></ol>
+            <ol id="recordingsList"></ol>
         </div>
         <button class="save" id="save_btn" type="submit">Save</button>
         <script type="text/javascript" src="{% static 'js/voice_record_edit.js' %}"></script>

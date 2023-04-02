@@ -3,65 +3,42 @@
 h3 {
 	color: red;
 }
+
 .my_entries {
 	color: green;
-	}
-.edit {
-	cursor: pointer;
-        background: #1a73e8;
-        color: white;
-	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .55rem;
 }
-.delete {
+
+.edit, .delete, .send:hover {
 	cursor: pointer;
-        background: #EA1414;
-        color: white;
+	background: #1a73e8;
+	color: white;
 	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .55rem;
+	padding: .275rem .55rem;
+	border-radius: .55rem;
 }
-.send {
-	cursor: pointer;
-        background: #1a73e8;
-        color: white;
-	border: 1px solid transparent;
-        padding: .275rem .55rem;
-        border-radius: .55rem;
+
+.delete, .edit, .send:hover {
+	transform: scale(1.06);
 }
+
 .image {
-	max-height:300px;
+	max-height: 300px;
 }
+
 .image_url {
 	color: blue;
 }
-.send:hover {
-        -webkit-transform: scale(1.06);
-        -ms-transform: scale(1.06);
-        transform: scale(1.06);
-        }
-.delete:hover {
-        -webkit-transform: scale(1.06);
-        -ms-transform: scale(1.06);
-        transform: scale(1.06);
-        }
-.edit:hover {
-        -webkit-transform: scale(1.06);
-        -ms-transform: scale(1.06);
-        transform: scale(1.06);
-        }
-#header_entry {
-    word-wrap: break-word;
+
+#header_entry, #text_entry {
+	word-wrap: break-word;
 }
-#text_entry {
-    word-wrap: break-word;
-}
+
 audio::-webkit-media-controls-play-button,
-     audio::-webkit-media-controls-panel {
-     background-color: #dadada;
-     }
+audio::-webkit-media-controls-panel {
+	background-color: #dadada;
+}
+
 audio {
-    width: 100%;
-    max-width: 20em;
+	width: 100%;
+	max-width: 20em;
 }
