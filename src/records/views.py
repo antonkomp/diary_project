@@ -234,8 +234,15 @@ def open_image(request, entry_id):
         return render(request, 'login.html', {'form': AuthenticationForm()})
     return render(request, 'open_image.html', {'entry': entry})
 
+import requests
+from django.conf import settings
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from .models import Entry
 
-@login_required
 @require_http_methods(["POST"])
 def send_entry(request, entry_id):
     entry = get_object_or_404(Entry, id=entry_id, user=request.user)
@@ -246,17 +253,137 @@ def send_entry(request, entry_id):
     to = user.email
 
     html_content = render_to_string('email/send_entry.html', {'user': user, 'form': entry})
+    print(html_content)
 
-    email = EmailMessage(subject, html_content, from_email, [to])
-    if entry.image:
-        email.attach_file(entry.image.path)
-    if entry.voice_record:
-        email.attach_file(entry.voice_record.path)
+    url = 'https://www.googleapis.com/gmail/v1/users/me/messages/send?key=' + 'AIzaSyBCJMCzBf4IwmwyyMBDd3yQ_CX3cN7lfSs' # settings.GOOGLE_API_KEY
 
-    email.send(fail_silently=False)
+    message = {'raw': base64.urlsafe_b64encode(html_content.encode('utf-8')).decode('utf-8')}
 
-    messages.success(request, 'The entry was successfully sent to email!')
+    body = {'raw': base64.urlsafe_b64encode(html_content.encode('utf-8')).decode('utf-8')}
+    print(body)
+
+    headers = {
+        'Authorization': 'Bearer ' + 'AIzaSyBCJMCzBf4IwmwyyMBDd3yQ_CX3cN7lfSs', # settings.GOOGLE_API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.post(url, headers=headers, json=body)
+    print(response.text)
+
+    if response.status_code == 200:
+        messages.success(request, 'The entry was successfully sent to email!')
+    else:
+        messages.error(request, 'An error occurred while sending the email.')
+
     return HttpResponseRedirect(reverse('detail_entry', args=[entry_id]))
+
+# @login_required
+# @require_http_methods(["POST"])
+# def send_entry(request, entry_id):
+#     entry = get_object_or_404(Entry, id=entry_id, user=request.user)
+#     user = request.user
+#
+#     subject = 'Sending your entry from Diary'
+#     from_email = 'antonkomp1@gmail.com'
+#     to = user.email
+#
+#     html_content = render_to_string('email/send_entry.html', {'user': user, 'form': entry})
+#
+#     email = EmailMessage(subject, html_content, from_email, [to])
+#     if entry.image:
+#         email.attach_file(entry.image.path)
+#     if entry.voice_record:
+#         email.attach_file(entry.voice_record.path)
+#
+#     email.send(fail_silently=False)
+#
+#     messages.success(request, 'The entry was successfully sent to email!')
+#     return HttpResponseRedirect(reverse('detail_entry', args=[entry_id]))
+
+#
+import base64
+# import os.path
+# from email.mime.text import MIMEText
+# from google.oauth2.credentials import Credentials
+# from googleapiclient.discovery import build
+# from django.shortcuts import redirect
+# from django.conf import settings
+#
+# @require_http_methods(["POST"])
+# def send_entry(request, entry_id):
+#     entry = get_object_or_404(Entry, id=entry_id, user=request.user)
+#     user = request.user
+#
+#     subject = 'Sending your entry from Diary'
+#     from_email = 'antonkomp1@gmail.com'
+#     to = user.email
+#
+#     html_content = render_to_string('email/send_entry.html', {'user': user, 'form': entry})
+#
+#     credentials_file = os.path.join(os.path.dirname(__file__), 'google_console_creds.json')
+#     print(credentials_file, '!!!!')
+#     credentials = Credentials.from_authorized_user_file(credentials_file)
+#     print(credentials, '!!!!')
+#     # api_key = 'AIzaSyBCJMCzBf4IwmwyyMBDd3yQ_CX3cN7lfSs'
+#     if not credentials:
+#         flow = InstalledAppFlow.from_client_secrets_file(str(settings.GOOGLE_OAUTH2_CLIENT_SECRETS_FILE), SCOPES)
+#         credentials = flow.run_local_server(port=0)
+#
+#     # if credentials and credentials.expired and credentials.refresh_token:
+#     #     credentials.refresh(Credentials())
+#
+#     service = build('gmail', 'v1', credentials=credentials)
+#     message = MIMEText(html_content, 'html')
+#     message['to'] = to
+#     message['subject'] = subject
+#     create_message = {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
+#     send_message = service.users().messages().send(userId='me', body=create_message).execute()
+#
+#     messages.success(request, 'The entry was successfully sent to email!')
+#     return HttpResponseRedirect(reverse('detail_entry', args=[entry_id]))
+
+
+# import base64
+# from email.mime.text import MIMEText
+# from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+# from googleapiclient.discovery import build
+# from django.shortcuts import redirect
+#
+# # Здесь необходимо указать Client ID и Client Secret, которые были получены на предыдущих шагах.
+# CLIENT_ID = '248664437485-grkrj1jut62qbube7h20mhnc3sva7gp6.apps.googleusercontent.com>'
+# CLIENT_SECRET = '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'
+# REDIRECT_URI = 'http://localhost:8000/oauth2callback'
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+#
+#
+# def get_credentials(request):
+#     flow = InstalledAppFlow.from_client_secrets_file(
+#         'google_console_creds.json',
+#         scopes=SCOPES,
+#         redirect_uri=REDIRECT_URI
+#     )
+#
+#     if 'code' not in request.GET:
+#         auth_url, _ = flow.authorization_url(prompt='consent')
+#         return redirect(auth_url)
+#
+#     flow.fetch_token(code=request.GET['code'])
+#     credentials = flow.credentials
+#     return credentials
+#
+#
+# def send_email(request):
+#     credentials = get_credentials(request)
+#
+#     service = build('gmail', 'v1', credentials=credentials)
+#     message = MIMEText(request.POST['message'], 'html')
+#     message['to'] = request.POST['to']
+#     message['subject'] = request.POST['subject']
+#     create_message = {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
+#     send_message = (service.users().messages().send(userId='me', body=create_message).execute())
+#     print(F'sent message to {message["to"]} Message Id: {send_message["id"]}')
+#     return redirect('home')
 
 
 class APIEntries(generics.ListAPIView):

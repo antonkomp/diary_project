@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'dialogs',
     'channels',
+    'google_auth_oauthlib',
+    'google.oauth2',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
