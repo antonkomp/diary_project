@@ -300,7 +300,7 @@ def send_entry(request, entry_id):
 #     messages.success(request, 'The entry was successfully sent to email!')
 #     return HttpResponseRedirect(reverse('detail_entry', args=[entry_id]))
 
-#
+# temp !!!!!
 import base64
 # import os.path
 # from email.mime.text import MIMEText
