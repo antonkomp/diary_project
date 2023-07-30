@@ -12,7 +12,7 @@
             <div class="chat">
                 <div class="chat_window_main" id="chat-messages">
                     {% for message in messages %}
-                    <div class="{% if message.user == companion %}message_info_companion{% else %}message_info{% endif %}">
+                    <div class="{% if message.user == companion %}message_info_companion{% else %}message_info{% endif %}" id="message_container_{{ message.pk }}">
                         <div class="action">
                             <div>
                             {% if message.user.profile.image %}
@@ -23,19 +23,25 @@
                             <span class="usr_fullname">{{ message.user.first_name }} {{ message.user.last_name }}</span>
                             <span class="usr_name">@{{ message.user.username }}</span>
                             </div>
-                            {% if  message.user == user %}
-                                <a href="{% url 'delete_message' message.pk %}"><button class="delete_mes" id="del_button">&#10008;</button></a>
+                            {% if message.user == user %}
+                                <div>
+                                    <a><button class="delete_edit_mes" id="edit_button" onclick="editMessage('{{ message.pk }}')">&#9997;</button></a>
+                                    <a><button class="delete_edit_mes" id="del_button" onclick="deleteMessage('{{ message.pk }}')">&#10008;</button></a>
+                                </div>
                             {% endif %}
                         </div>
-                        <p class="message" id="message_text">{{ message.text }}</p>
-                        <p class="date" id="message_date">{{ message.date }}</p>
+                        <p class="message" id="message_text_{{ message.pk }}">{{ message.text }}</p>
+                        <div class="info">
+                            <p class="edited">{% if message.is_edited %} (Edited) {% endif %}</p>
+                            <p class="date" id="message_date_{{ message.pk }}">{{ message.date }}</p>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
                 <div class="message_input">
                 <form method="POST" id="form_message">
                     <label for="chat-message-input"></label>
-                    <textarea class="input" name="context" placeholder="Your message..." id="chat-message-input"  rows="2" cols="45" wrap="hard"></textarea>
+                    <textarea class="input" name="context" placeholder="Your message..." id="chat-message-input"  rows="2" cols="45" wrap="hard" onkeydown="handleMessageInput(event)"></textarea>
                     <button class="button" id="chat-message-submit">Send</button>
                 </form>
                 </div>
@@ -63,39 +69,29 @@
 
         const data = JSON.parse(e.data);
         const today = new Date();
-        const date = today.toLocaleString('en-US', {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true});
-
-
-        if (data.message) {
+        const existingMessageContainer = document.querySelector(`#message_container_${data.message_id}`);
+        
+        if (data.message && !existingMessageContainer) {
             if (data.username == userName) {
-                let html = '<div class="message_info">';
+                let html = '<div class="message_info" id="message_container_' + data.message_id + '">';
                 html += `<div class="action"><div><img class="avatar_message" src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'image/anonymous.jpg' %}{% endif %}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">`;
-                html += '<span class="usr_fullname">' + ' ' + '{{user.first_name}} {{user.last_name}}'+ '</span><span class="usr_name">@' + data.username + `</span></div><a href=""><button class="delete_mes" id="del_button">&#10008;</button></a></div>`;
-                html += '<p class="message" id="message_text">' + data.message + '{{ data.pk }}' + '</p>';
-                html += '<p class="date" id="message_date">' + date + '</p></div>';
-
+                html += '<span class="usr_fullname">' + ' ' + '{{user.first_name}} {{user.last_name}}'+ '</span><span class="usr_name">@' + data.username + `</span></div><div><a><button class="delete_edit_mes" id="edit_button" onclick="editMessage('` + data.message_id + `')">&#9997;</button></a><a href=""><button class="delete_edit_mes" id="del_button" onclick="deleteMessage('` + data.message_id + `')">&#10008;</button></a></div></div>`;
+                html += '<p class="message" id="message_text_' + data.message_id + '">' + data.message + '{{ data.pk }}' + '</p>';
+                html += '<div class="info"><p class="edited" id="edited_' + data.message_id + '"></p><p class="date" id="message_date_' + data.message_id + '">' + data.message_date + '</p></div></div>';
                 document.querySelector('#chat-messages').innerHTML += html;
             } else {
-                let html = '<div class="message_info_companion">';
+                let html = '<div class="message_info_companion" id="message_container_' + data.message_id + '">';
                 html += `<div class="action"><div><img class="avatar_message" src="{% get_companion user chat as companion %}{% if companion.profile.image %}{{ companion.profile.image.url }}{% else %}{% static 'image/anonymous.jpg' %}{% endif %}" alt="user_image" width="38" height="38" style="border-radius: 50%; border: 2px solid #e6e6e6;" title="">`;
                 html += '<span class="usr_fullname">' + ' ' + '{% get_companion user chat as companion %}{{companion.first_name}}{{companion.last_name}}' + '</span><span class="usr_name">@' + data.username + '</span></div></div>';
-                html += '<p class="message">' + data.message + '</p>';
-                html += '<p class="date">' + date + '</p></div>';
+                html += '<p class="message" id="message_text_' + data.message_id + '">' + data.message + '</p>';
+                html += '<div class="info"><p class="edited" id="edited_' + data.message_id + '"></p><p class="date" id="message_date_' + data.message_id + '">' + data.message_date + '</p></div></div>';
 
                 document.querySelector('#chat-messages').innerHTML += html;
             }
 
             scrollToBottom();
-        } else {
-            alert('The message was empty!');
-        }
-        location.reload()
+        } 
+
     }
 
     chatSocket.onclose = function(e) {
@@ -111,6 +107,7 @@
         const message = messageInputDom.value;
 
         chatSocket.send(JSON.stringify({
+            'action': 'create',
             'message': message,
             'username': userName,
             'chat': chatName,
@@ -129,5 +126,75 @@
     }
 
     scrollToBottom();
+
+    function handleMessageInput(event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault();
+
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+
+            chatSocket.send(JSON.stringify({
+                'action': 'create',
+                'message': message,
+                'username': userName,
+                'chat': chatName
+            }));
+
+            messageInputDom.value = '';
+        }
+    }
+    function editMessage(messageId) {
+        const messageText = document.querySelector(`#message_text_${messageId}`);
+        const messageDate = document.querySelector(`#message_date_${messageId}`);
+        const messageTextValue = messageText.textContent.trim();
+        const messageDateValue = messageDate.textContent.trim();
+        const messageInput = document.createElement('textarea');
+        messageInput.value = messageTextValue;
+        messageInput.className = 'edit_message_input';
+        messageText.replaceWith(messageInput);
+
+        const saveButton = document.createElement('button');
+        saveButton.innerText = 'Save';
+        saveButton.className = 'save_mes';
+        saveButton.onclick = function () {
+            saveMessage(messageId, messageInput.value, messageText.textContent, messageText, messageDateValue);
+        };
+        messageInput.parentNode.appendChild(saveButton);
+        
+    }
+
+    function saveMessage(messageId, newText, oldText, messageText, messageDate) {
+
+        const updatedText = newText.trim();
+        const messageInput = document.querySelector(`.edit_message_input`);
+        const saveButton = document.querySelector(`.save_mes`);
+        const editeText = document.querySelector(`#edited_${messageId}`);
+
+        if (updatedText !== oldText) {
+            chatSocket.send(JSON.stringify({
+            'action': 'update',
+            'message_id': messageId,
+            'message': updatedText,
+            'username': userName,
+            'message_date': messageDate
+        }));
+
+        }
+        editeText.textContent = "(Edited)"
+        messageText.textContent = updatedText;
+        messageInput.replaceWith(messageText);
+        saveButton.remove();
+        
+    }
+
+    function deleteMessage(messageId) {
+        const messageContainer = document.querySelector(`#message_container_${messageId}`);
+        chatSocket.send(JSON.stringify({
+            'action': 'delete',
+            'message_id': messageId
+        }));
+        messageContainer.remove();
+    }
 </script>
 {% endblock %}
